@@ -1,7 +1,7 @@
 
 Bienvenue dans le cours ACT3035! Dans ce répertoire GitHyb, vous pouvez retrouver tout le matériel utilisé chaque session. 
 
-Si vous voulez consulter le contenu du cours planifié, suivez ce [lien http://nour.me/act3035/](http://nour.me/act3035/)
+Si vous voulez consulter le contenu du cours planifié, suivez ce [https://nour.me/act3035book/](https://nour.me/act3035book/)
 
 En plus des donnnés que nous utilisons en classe se trouvant dans le répertoire [data](https://github.com/nmeraihi/ACT3035/tree/master/data), voic une liste des données publique que nous pourrion utiliser:
 
