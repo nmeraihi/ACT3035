@@ -1,0 +1,1467 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{1\_1\_cours}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    Table of Contents{}
+
+{{1~~}Ouvrir Rstudio}
+
+{{1.1~~}Sous Linux}
+
+{{1.2~~}Sous macOS}
+
+{{1.3~~}Sous windows,}
+
+{{2~~}Présentation de RStudio}
+
+{{2.1~~}Les sous-section}
+
+{{2.2~~}Créer un script}
+
+{{3~~}Packages}
+
+{{3.1~~}autocompletion}
+
+{{3.2~~}Quels packages sont chargé dans l'environnement?}
+
+{{4~~}Assignation des variables}
+
+{{4.1~~}avec le signe =}
+
+{{4.2~~}La flèche vers la gauche \textless{}-}
+
+{{4.3~~}La flèche vers la droite -\textgreater{}}
+
+{{4.4~~}La fonction assign()}
+
+{{5~~}Les nombres, les caractères et les booléens}
+
+{{5.1~~}Changement du type de variable}
+
+{{5.2~~}Tester le type de variable}
+
+{{5.2.1~~}Test d'égalité}
+
+{{5.2.2~~}Test d'inégalité}
+
+{{6~~}Les opérations sur le workspace}
+
+{{6.1~~}Répertoire courant}
+
+{{6.2~~}Changer le répertoire courant}
+
+{{6.3~~}Lister les objets dans la mémoire}
+
+{{6.4~~}Supprimer un objets de la mémoire}
+
+{{6.5~~}Vider complètement le workspace}
+
+{{7~~}Help}
+
+{{7.1~~}Aide sur les fonctions}
+
+{{7.2~~}La fonction example}
+
+{{7.3~~}Aide sur les données}
+
+{{8~~}Plus de resources}
+
+    Dans ce cours, nous allons utiliser la console RStudio que nous avons
+installé. Nous allons présenter la console, et découvrir les principales
+sections que nous utiliserons tout au long des prochains cours sur la
+programmation en R.
+
+    \hypertarget{ouvrir-rstudio}{%
+\section{Ouvrir Rstudio}\label{ouvrir-rstudio}}
+
+    \hypertarget{sous-linux}{%
+\subsection{Sous Linux}\label{sous-linux}}
+
+vous ouvrez le terminal en appuyant sur les touches \texttt{Ctrl+Alt+T}
+et vous tapez \texttt{RStudio}
+
+    \hypertarget{sous-macos}{%
+\subsection{Sous macOS}\label{sous-macos}}
+
+Vous appuyez sur la touche \textbf{\texttt{cmd+space}} vous tapez
+ensuite sur \texttt{RSdtudio} en \texttt{Enter} ensuite
+
+    \hypertarget{sous-windows}{%
+\subsection{Sous windows,}\label{sous-windows}}
+
+Cherchez l'application RStudio et vous cliquez là-dessus pour la lancer
+
+    \hypertarget{pruxe9sentation-de-rstudio}{%
+\section{Présentation de RStudio}\label{pruxe9sentation-de-rstudio}}
+
+    Lorsque nous ouvrons RStudion, nous avons alors une fenêtre avec trois
+sections dans lesquels nous allons travailler.
+
+    
+
+    \hypertarget{les-sous-section}{%
+\subsection{Les sous-section}\label{les-sous-section}}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  La console est là où le code R est exécuté, cette console est la même
+  que ce que nous voyons si nous ouvrons R
+\item
+  Dans la deuxième section, nous retrouvons;
+
+  \begin{enumerate}
+  \def\labelenumii{\arabic{enumii}.}
+  \tightlist
+  \item
+    \emph{Environment}, dans ce dernier nous retrouvons la liste des
+    données ou objets à notre disposition. Par exemple, lorsque nous
+    avons assigné la valeur 2 à la variable \(y\), nous remarquons alors
+    que RStudio garde en mémoire la valeur de cette variable.
+  \item
+    History: cette sous-section contient l'historique des commandes que
+    nous avons exécutées. Si nous cliquons sur une ligne quelconque,
+    nous verrons alors cette ligne s'écrire dans la console. Lorsque
+    nous appuyons sur \texttt{Enter}, la ligne s'exécute.
+  \end{enumerate}
+\item
+  La troisième section contient;
+
+  \begin{enumerate}
+  \def\labelenumii{\arabic{enumii}.}
+  \tightlist
+  \item
+    Files: ici, nous pouvons naviguer directement dans le dossier dans
+    lequel nous voulons; exécuter du code, créer des données, importer
+    des données\ldots{}etc. Nous verrons un peu plus loin plus en détail
+    cette sous-section.
+  \item
+    Plots: dans cette sous-section, nous retrouvons nos graphiques que
+    nous avons exécutés, nous pouvons les exporter directement à partir
+    de là
+  \item
+    Packages: Ici, nous retrouvons les packages qui nous sont
+    disponibles à télécharger ou qui le sont déjà (coché ou pas).
+  \item
+    Help: Cette sous-section est très importante, car elle nous permet
+    trouver la documentation du langage R. Nous avons qu'à écrire ce que
+    nous cherchons.
+  \end{enumerate}
+\end{enumerate}
+
+    \hypertarget{cruxe9er-un-script}{%
+\subsection{Créer un script}\label{cruxe9er-un-script}}
+
+    Afin de sauvegarder notre code R, nous pouvons ouvrir un nouveau script
+en cliquant sur le petit signe plus vert en haut à gauche. Ou simplement
+\textbf{\texttt{Ctrl+Shift+N}}
+
+    Un script est simplement un éditeur de code R, dans lequel nous pouvons
+exécuter notre code ligne par ligne en appuyant sur
+\textbf{\texttt{Ctrl+Enter}} ou en cliquant sur le bouton \texttt{Run}
+
+    
+
+    Une fois votre script est créé, vous pouvez le sauvegarder à l'endroit
+que vous voulez.
+
+    \hypertarget{packages}{%
+\section{Packages}\label{packages}}
+
+    Les packages R sont une partie importante, ce sont une collection de
+fonctions et de données créées par des individus (chercheurs, étudiants,
+des geeks\ldots{}etc.) Au sein de la communauté open source. Lorsque
+nous installons R, un ensemble de packages est déjà inclus.
+
+Afin de savoir quels packages sont installés, il suffit de taper
+\texttt{library()}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{library}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    
+    
+    Lorsqu'on exécute une ligne de code, comme ce qu'on vient de faire avec
+\texttt{library()}, on demande à \texttt{R} de trouver la fonction et de
+l'exécuter. Habituellement, les fonctions requirent un argument, cette
+fonction est une exception et ne requiert aucun argument. Ainsi, il
+suffit de taper \texttt{library} sans les parenthèses.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} library}
+\end{Verbatim}
+
+
+    \hypertarget{autocompletion}{%
+\subsection{\texorpdfstring{\emph{autocompletion}}{autocompletion}}\label{autocompletion}}
+
+    Dans RStudio, et dans la majorité des IDE récents, il existe une option
+très utile appelée
+\href{https://support.rstudio.com/hc/en-us/articles/205273297-Code-Completion}{\emph{autocompletion}}.
+Elle devient très utile lorsque nous nous rappelons plus comment s'écrit
+exactement une option ou quels en sont les arguments.
+
+Il suffit de taper sur la touche \texttt{tab}
+
+    Exemple: si nous voulons écrire la fonction \texttt{library()}, il
+suffit d'écrire \texttt{lib} et taper sur la touche \texttt{tab}.
+RStudio nous donne plusieurs choix de fonction que sont nom commence par
+les trois lettres \texttt{lib}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} lib
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        Error in eval(expr, envir, enclos): object 'lib' not found
+    Traceback:
+
+
+    \end{Verbatim}
+
+    Une fois que le mot complet est saisi, en ouvrant des parenthèses, on
+peut encore taper sur la touche \texttt{tab} afin d'avoir la liste des
+arguments obligatoires ou optionnels à saisir.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{k+kn}{library}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    
+    
+    \hypertarget{quels-packages-sont-charguxe9-dans-lenvironnement}{%
+\subsection{Quels packages sont chargé dans
+l'environnement?}\label{quels-packages-sont-charguxe9-dans-lenvironnement}}
+
+    Afin de voir quels \_packagers sont chargés dans l'environnement, il
+suffit de taper la commande \texttt{search()}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{k+kp}{search}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{enumerate*}
+\item '.GlobalEnv'
+\item 'jupyter:irkernel'
+\item 'package:stats'
+\item 'package:graphics'
+\item 'package:grDevices'
+\item 'package:utils'
+\item 'package:datasets'
+\item 'package:methods'
+\item 'Autoloads'
+\item 'package:base'
+\end{enumerate*}
+
+
+    
+    Un \emph{package} que nous utiliserons beaucoup au début est le
+\_package \texttt{MASS}. Afin que nous soyons sûrs de l'avoir, nous
+l'installons à nouveau avec la commande suivante:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} install.packages(\PYZdq{}MASS\PYZdq{})}
+\end{Verbatim}
+
+
+    Nous pouvons voir dans l'onglet \emph{packages} dans RSudio que nous
+l'avons et qu'il prêt à charger. Nous procédons au chargement de ce
+\emph{package} on le cochant ou simplement (il faut vraiment s'habituer
+à travailler avec les commandes dans la console) avec la commande
+suivante:
+
+    On peut aussi installer un \emph{package} avec l'IDE (Integrated
+development environment ) de RStudio
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} require(MASS)}
+\end{Verbatim}
+
+
+    \textbf{Attention}: R est sensible aux caractères \emph{case sensitive}.
+Donc si j'écris:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} require(mass)}
+\end{Verbatim}
+
+
+    J'ai alors un message d'erreur
+\textbf{\texttt{“there\ is\ no\ package\ called\ ‘mass’”}}
+
+    \hypertarget{assignation-des-variables}{%
+\section{Assignation des variables}\label{assignation-des-variables}}
+
+    Comment peut-on assigner des valeurs à des variables? R reconnait les
+valeurs numériques telles qu'elles sont.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{l+m}{3}
+\end{Verbatim}
+
+
+    3
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{l+m}{2}
+\end{Verbatim}
+
+
+    2
+
+    
+    Toutesfois, il existe d'autres variables numériques écrites en
+caractère. Par exemple, \(\pi\). lorsqu'on saisit \texttt{pi} dans R, il
+nous redonne la valeur numérique (arrondie) de \(\pi\)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{k+kc}{pi}
+\end{Verbatim}
+
+
+    3.14159265358979
+
+    
+    Ce sont des variables déjà existantes dans \texttt{R}. Si l'on voulait
+chercher des valeurs non existantes dans R, ce dernier nous retourne un
+message d'erreur;
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} x
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        Error in eval(expr, envir, enclos): object 'x' not found
+    Traceback:
+
+
+    \end{Verbatim}
+
+    On peut assigner une valeur à une variable de différentes manières;
+
+    \hypertarget{avec-le-signe}{%
+\subsection{avec le signe =}\label{avec-le-signe}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} x\PY{o}{=}\PY{l+m}{2}
+         x
+\end{Verbatim}
+
+
+    2
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} y\PY{o}{=}\PY{l+m}{3}
+         y
+\end{Verbatim}
+
+
+    3
+
+    
+    \hypertarget{la-fluxe8che-vers-la-gauche--}{%
+\subsection{La flèche vers la gauche
+\textless{}-}\label{la-fluxe8che-vers-la-gauche--}}
+
+Par convention, nous utilison cette méthode
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} x\PY{o}{\PYZlt{}\PYZhy{}}\PY{l+m}{2}
+         x
+\end{Verbatim}
+
+
+    2
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}13}]:} y\PY{o}{\PYZlt{}\PYZhy{}}\PY{l+m}{3}
+\end{Verbatim}
+
+
+    Nous avons donné la valeur 2 à \(x\) et la valeur 3 à \(y\). Ces valeurs
+sont gardées en mémoire, on peut d'ailleurs faire des opérations
+mathématiques sur ces valeurs. Par exemple on veut \[x+y\]
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}14}]:} x\PY{o}{+}y
+\end{Verbatim}
+
+
+    5
+
+    
+    Si l'on voulait appliquer, un calcule sur une variable que nous n'y
+avons pas assigner une valeur auparavant, cela ne fonctionnerait pas,
+puisque R ne l'a pas gardé en mémoire.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}15}]:} z\PY{l+m}{+1}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        Error in eval(expr, envir, enclos): object 'z' not found
+    Traceback:
+
+
+    \end{Verbatim}
+
+    Rappelons-nous que R est \emph{case sensitive}, par exemple:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}16}]:} X
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        Error in eval(expr, envir, enclos): object 'X' not found
+    Traceback:
+
+
+    \end{Verbatim}
+
+    Nous avons essayé d'appeler \(X\), mais il nous retourne un message
+d'erreur. Cela est dû à cause la majuscule.
+
+    nous avions donné à x la valeur \texttt{x\textless{}-2} et
+\texttt{y\textless{}-3}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}17}]:} \PY{k+kp}{print}\PY{p}{(}x\PY{p}{)}
+         \PY{k+kp}{print}\PY{p}{(}y\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] 2
+[1] 3
+
+    \end{Verbatim}
+
+    Nous pouvons écraser la valeur de x en lui assignant la valeur de y;
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}18}]:} x\PY{o}{\PYZlt{}\PYZhy{}}y
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}19}]:} \PY{k+kp}{print}\PY{p}{(}x\PY{p}{)}
+         \PY{k+kp}{print}\PY{p}{(}y\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] 3
+[1] 3
+
+    \end{Verbatim}
+
+    Soit maintenant \(z=9\), on peut aussi faire ceci:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}20}]:} x\PY{o}{\PYZlt{}\PYZhy{}}y\PY{o}{\PYZlt{}\PYZhy{}}z\PY{o}{\PYZlt{}\PYZhy{}}\PY{l+m}{9}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{k+kp}{print}\PY{p}{(}x\PY{p}{)}
+         \PY{k+kp}{print}\PY{p}{(}y\PY{p}{)}
+         \PY{k+kp}{print}\PY{p}{(}z\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[1] 9
+[1] 9
+[1] 9
+
+    \end{Verbatim}
+
+    Remarquez que R commence toujours par la fin, la valeur 9 a été assignée
+à toutes les variables.
+
+    \hypertarget{la-fluxe8che-vers-la-droite--}{%
+\subsection{La flèche vers la droite
+-\textgreater{}}\label{la-fluxe8che-vers-la-droite--}}
+
+On peut aussi utiliser l'autre sens de la flèche (vers la droite) pour
+assigner des valeurs à des variables
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{l+m}{15} \PY{o}{\PYZhy{}\PYZgt{}}p
+\end{Verbatim}
+
+
+    Toutefois, nous restons dans la convention et utilisons la flèche vers
+la gauche
+
+    \hypertarget{la-fonction-assign}{%
+\subsection{\texorpdfstring{La fonction
+\texttt{assign()}}{La fonction assign()}}\label{la-fonction-assign}}
+
+    Nous pouvons aussi utliliser la fonction \texttt{assign()}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{assign}\NormalTok{(x, value, }\DataTypeTok{pos =} \DecValTok{-1}\NormalTok{, }\DataTypeTok{envir =} \KeywordTok{as.environment}\NormalTok{(pos),}
+       \DataTypeTok{inherits =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{immediate =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}23}]:} \PY{k+kp}{assign}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{q\PYZdq{}}\PY{p}{,}\PY{l+m}{30}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{k+kp}{q}
+\end{Verbatim}
+
+
+    30
+
+    
+    Cette fonction est souvent utilisée à l'intérieur d'une boucle où l'on
+voudrait assigner une valeur quelconque à une variable qui peut changer
+lors des itérations
+
+    \hypertarget{les-nombres-les-caractuxe8res-et-les-booluxe9ens}{%
+\section{Les nombres, les caractères et les
+booléens}\label{les-nombres-les-caractuxe8res-et-les-booluxe9ens}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} num\PY{o}{\PYZlt{}\PYZhy{}}\PY{l+m}{25}
+         string\PY{o}{\PYZlt{}\PYZhy{}}\PY{l+s}{\PYZdq{}}\PY{l+s}{bonjour\PYZdq{}}
+         booleen\PY{o}{\PYZlt{}\PYZhy{}}\PY{k+kc}{TRUE}
+\end{Verbatim}
+
+
+    On peut appeler la variable \texttt{string} et elle nous retourne ceci:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}27}]:} string
+\end{Verbatim}
+
+
+    'bonjour'
+
+    
+    Afin de donner une valeur de type \emph{string} à une variable, on peut
+utiliser les doubles `apostrophes', ou des ``guillemets''
+
+    On peut assigner une valeur booléenne à une variable par \texttt{TRUE}
+ou \texttt{FALSE}, mais aussi par simplement \texttt{T} ou \texttt{F}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}28}]:} booleen2 \PY{o}{\PYZlt{}\PYZhy{}}\PY{n+nb+bp}{T}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}29}]:} booleen2
+\end{Verbatim}
+
+
+    TRUE
+
+    
+    Il est possible de savoir quel type possède une variable gardée en
+mémoire
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} \PY{k+kp}{class}\PY{p}{(}string\PY{p}{)}
+\end{Verbatim}
+
+
+    'character'
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{k+kp}{class}\PY{p}{(}booleen\PY{p}{)}
+\end{Verbatim}
+
+
+    'logical'
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{k+kp}{class}\PY{p}{(}num\PY{p}{)}
+\end{Verbatim}
+
+
+    'numeric'
+
+    
+    On peut aussi faire un test booléen sur le type d'une variable par\\
+* \texttt{is.numeric(variable)} * \texttt{is.logical(variable)} *
+\texttt{is.character(variable)}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{k+kp}{is.logical}\PY{p}{(}num\PY{p}{)}
+\end{Verbatim}
+
+
+    FALSE
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}34}]:} \PY{k+kp}{is.numeric}\PY{p}{(}num\PY{p}{)}
+\end{Verbatim}
+
+
+    TRUE
+
+    
+    \hypertarget{changement-du-type-de-variable}{%
+\subsection{Changement du type de
+variable}\label{changement-du-type-de-variable}}
+
+    On peut aussi changer le type d'une variable
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}35}]:} \PY{k+kp}{as.character}\PY{p}{(}num\PY{p}{)}
+\end{Verbatim}
+
+
+    '25'
+
+    
+    Remarquons les apostrophes. Toutefois, il faut faire attention avec les
+conversions; essayons de convertir un \emph{string} en \emph{numeric}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}36}]:} \PY{c+c1}{\PYZsh{} as.numeric(string)}
+\end{Verbatim}
+
+
+    Nous obtenons \texttt{NA} (not available). Car R ne sait pas comment
+traduire cette variable de type \emph{string} en \emph{numeric}.
+
+    Toutefois, il est possible de changer des booléens vers numérique. *
+TRUE=T=1 * FALSE=F=0
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}37}]:} \PY{k+kp}{as.numeric}\PY{p}{(}booleen\PY{p}{)}
+\end{Verbatim}
+
+
+    1
+
+    
+    \hypertarget{tester-le-type-de-variable}{%
+\subsection{Tester le type de
+variable}\label{tester-le-type-de-variable}}
+
+    On peut aussi faire un test booléen sur deux valeurs. Par exemple, on
+peut demander si une valeur est plus petite ou égale (ou supérieure ou
+égale) à une autre variable.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}38}]:} num\PY{o}{\PYZlt{}}\PY{l+m}{100}
+\end{Verbatim}
+
+
+    TRUE
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}39}]:} num\PY{o}{\PYZlt{}=}\PY{l+m}{100}
+\end{Verbatim}
+
+
+    TRUE
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}40}]:} num\PY{o}{\PYZgt{}=}\PY{l+m}{100}
+\end{Verbatim}
+
+
+    FALSE
+
+    
+    \hypertarget{test-duxe9galituxe9}{%
+\subsubsection{Test d'égalité}\label{test-duxe9galituxe9}}
+
+    Le test sur l'égalité se fait par un double ==
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}41}]:} x\PY{o}{==}y
+\end{Verbatim}
+
+
+    TRUE
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}42}]:} x\PY{o}{==}num
+\end{Verbatim}
+
+
+    FALSE
+
+    
+    \hypertarget{test-dinuxe9galituxe9}{%
+\subsubsection{Test d'inégalité}\label{test-dinuxe9galituxe9}}
+
+    Pour ce qui est du test d'inégalité, on utilise \texttt{!=}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}43}]:} x\PY{o}{!=}y
+\end{Verbatim}
+
+
+    FALSE
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}44}]:} x\PY{o}{!=}num
+\end{Verbatim}
+
+
+    TRUE
+
+    
+    On peut aussi faire des tests logiques sur les valeurs de type string
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}45}]:} string2\PY{o}{\PYZlt{}\PYZhy{}}\PY{l+s}{\PYZdq{}}\PY{l+s}{bonjours\PYZdq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}46}]:} string\PY{o}{==}string2
+\end{Verbatim}
+
+
+    FALSE
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}47}]:} string\PY{o}{!=}string2
+\end{Verbatim}
+
+
+    TRUE
+
+    
+    \hypertarget{les-opuxe9rations-sur-le-workspace}{%
+\section{\texorpdfstring{Les opérations sur le
+\texttt{workspace}}{Les opérations sur le workspace}}\label{les-opuxe9rations-sur-le-workspace}}
+
+    \hypertarget{ruxe9pertoire-courant}{%
+\subsection{Répertoire courant}\label{ruxe9pertoire-courant}}
+
+    Afin de savoir dans quel répertoire nous travaillons, on peut utiliser
+\texttt{getwd()}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}48}]:} \PY{k+kp}{getwd}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    '/Users/nour/MEGA/Studies/ACT3035/AUT\_2018'
+
+    
+    On peut également voir dans l'onglet \emph{files} à droite de l'écran
+dans RStudio le répertoire dans lequel on travaille. Pour ceux qui sont
+dans la version Linux, il suffit de taper \texttt{pwd} dans l'onglet
+\emph{terminal}
+
+    On remarque que la fonction \texttt{getwd()} nous retourne une valeur de
+type string, on peut alors assigner cette valeur à une variable, par
+exemple:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}49}]:} \PY{k+kp}{dir}\PY{o}{\PYZlt{}\PYZhy{}}\PY{k+kp}{getwd}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}50}]:} \PY{k+kp}{dir}
+\end{Verbatim}
+
+
+    '/Users/nour/MEGA/Studies/ACT3035/AUT\_2018'
+
+    
+    \hypertarget{changer-le-ruxe9pertoire-courant}{%
+\subsection{Changer le répertoire
+courant}\label{changer-le-ruxe9pertoire-courant}}
+
+    On peut aussi changer le répertoire courant avec la fonction
+\texttt{setwd("repertoire/sous-repertoire")}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}53}]:} \PY{k+kp}{setwd}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{/Users/nour/MEGA/Studies/ACT3035/AUT\PYZus{}2018\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}54}]:} \PY{k+kp}{getwd}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    '/Users/nour/MEGA/Studies/ACT3035/AUT\_2018'
+
+    
+    On retourne à notre répertoire original, on se rappelle que la variable
+\texttt{dir} contenant justement une valeur string du premier
+répertoire. On peut réassigner une nouvelle valeur à notre répertoire
+courant avec cette variable;
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}55}]:} \PY{k+kp}{setwd}\PY{p}{(}\PY{k+kp}{dir}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}56}]:} \PY{k+kp}{getwd}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    '/Users/nour/MEGA/Studies/ACT3035/AUT\_2018'
+
+    
+    Toutefois, il est aussi possible de le faire via l'IDE avec
+\textbf{Session--\textgreater{} Set Working Directory --\textgreater{}
+Choose Directory}.\\
+OU avec le raccourci: \textbf{Ctrl+Shift+H}
+
+    \hypertarget{lister-les-objets-dans-la-muxe9moire}{%
+\subsection{Lister les objets dans la
+mémoire}\label{lister-les-objets-dans-la-muxe9moire}}
+
+    On peut avoir la liste des objets dans le répertoire courant avec la
+fonction \texttt{ls()}. Comme dans les commandes Linux dans le terminal
+(sans les parenthèses dans le cas de Linux)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}57}]:} \PY{k+kp}{ls}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{enumerate*}
+\item 'booleen'
+\item 'booleen2'
+\item 'dir'
+\item 'num'
+\item 'p'
+\item 'q'
+\item 'string'
+\item 'string2'
+\item 'x'
+\item 'y'
+\item 'z'
+\end{enumerate*}
+
+
+    
+    \hypertarget{supprimer-un-objets-de-la-muxe9moire}{%
+\subsection{Supprimer un objets de la
+mémoire}\label{supprimer-un-objets-de-la-muxe9moire}}
+
+    Si l'on veut supprimer une variable, il suffit d'utiliser la fonction
+\texttt{rm(variable)}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}58}]:} \PY{k+kp}{rm}\PY{p}{(}x\PY{p}{)}
+\end{Verbatim}
+
+
+    Regardons si x est encore là?
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}59}]:} \PY{k+kp}{ls}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{enumerate*}
+\item 'booleen'
+\item 'booleen2'
+\item 'dir'
+\item 'num'
+\item 'p'
+\item 'q'
+\item 'string'
+\item 'string2'
+\item 'y'
+\item 'z'
+\end{enumerate*}
+
+
+    
+    \hypertarget{vider-compluxe8tement-le-workspace}{%
+\subsection{\texorpdfstring{Vider complètement le
+\emph{workspace}}{Vider complètement le workspace}}\label{vider-compluxe8tement-le-workspace}}
+
+    Maintenant, on peut aussi vider tout le \emph{workspace} avec;
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}60}]:} \PY{k+kp}{rm}\PY{p}{(}\PY{k+kt}{list}\PY{o}{=}\PY{k+kp}{ls}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    Il est aussi possible de le faire avec le ``ballet'' dans l'onglet
+\emph{Environment}. Pour résumer, une fonction est simplement un appel à
+un script créé auparavant. Certaines fonctions nécessitent des
+arguments, et d'autres pas.
+
+    \hypertarget{help}{%
+\section{Help}\label{help}}
+
+    \hypertarget{aide-sur-les-fonctions}{%
+\subsection{Aide sur les fonctions}\label{aide-sur-les-fonctions}}
+
+    Lorsqu'on ne se rappelle plus ce qu'une fonction fait, on peut appeler
+cette fonction avec le caractère\texttt{?}précède le nom de la fonction.
+Ça nous donne la documentation sur cette fonction.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}61}]:} \PY{o}{?}\PY{k+kp}{sqrt}
+\end{Verbatim}
+
+
+    L'autre façon d'avoir la documentation d'une fonction c'est de
+simplement écrire \texttt{help(nomFonction)}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}62}]:} help\PY{p}{(}\PY{k+kp}{sqrt}\PY{p}{)}
+\end{Verbatim}
+
+
+    Si l'on ne se rappelle plus du nom exact de la fonction, on peut taper
+ce qu'on pense être le nom de la fonction précédée de \texttt{??}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}63}]:} \PY{o}{?}\PY{o}{?}\PY{k+kp}{remove}
+\end{Verbatim}
+
+
+    
+    
+    Ça nous conduit vers l'onglet \emph{help} en faisant une recherche avec
+le mot que nous avons tapé
+
+    Le mot \texttt{base::} qui précède le nom de la fonction veut dire de
+quel \emph{package} provient cette fonction. Dans notre exemple on peut
+lire \texttt{base::rm}
+
+    \hypertarget{la-fonction-example}{%
+\subsection{\texorpdfstring{La fonction
+\texttt{example}}{La fonction example}}\label{la-fonction-example}}
+
+    Une autre fonction très utile \texttt{example(NomFonction)} qui nous
+donne un exemple de la fonction que nous recherchons. En plus de nous
+décrire les \emph{packages} nécessaires (qui sont chargés).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}64}]:} example\PY{p}{(}\PY{k+kp}{sqrt}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+sqrt> require(stats) \# for spline
+
+sqrt> require(graphics)
+
+sqrt> xx <- -9:9
+
+sqrt> plot(xx, sqrt(abs(xx)),  col = "red")
+
+sqrt> lines(spline(xx, sqrt(abs(xx)), n=101), col = "pink")
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_157_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}65}]:} example\PY{p}{(}\PY{k+kp}{exp}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+exp> log(exp(3))
+[1] 3
+
+exp> log10(1e7) \# = 7
+[1] 7
+
+exp> x <- 10\^{}-(1+2*1:9)
+
+exp> cbind(x, log(1+x), log1p(x), exp(x)-1, expm1(x))
+          x                                                    
+ [1,] 1e-03 9.995003e-04 9.995003e-04 1.000500e-03 1.000500e-03
+ [2,] 1e-05 9.999950e-06 9.999950e-06 1.000005e-05 1.000005e-05
+ [3,] 1e-07 1.000000e-07 1.000000e-07 1.000000e-07 1.000000e-07
+ [4,] 1e-09 1.000000e-09 1.000000e-09 1.000000e-09 1.000000e-09
+ [5,] 1e-11 1.000000e-11 1.000000e-11 1.000000e-11 1.000000e-11
+ [6,] 1e-13 9.992007e-14 1.000000e-13 9.992007e-14 1.000000e-13
+ [7,] 1e-15 1.110223e-15 1.000000e-15 1.110223e-15 1.000000e-15
+ [8,] 1e-17 0.000000e+00 1.000000e-17 0.000000e+00 1.000000e-17
+ [9,] 1e-19 0.000000e+00 1.000000e-19 0.000000e+00 1.000000e-19
+
+    \end{Verbatim}
+
+    \hypertarget{aide-sur-les-donnuxe9es}{%
+\subsection{Aide sur les données}\label{aide-sur-les-donnuxe9es}}
+
+    Il est aussi possible d'avoir plus d'informations sur les données
+préchargées.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}66}]:} data\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    Ce sont des bases de données de R qui sont disponibles par défaut
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}67}]:} plot\PY{p}{(}cars\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_163_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    On peut aussi charger des données déjà disponibles dans un
+\emph{package}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}68}]:} \PY{k+kn}{require}\PY{p}{(}MASS\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Loading required package: MASS
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}69}]:} data\PY{p}{(}Cars93\PY{p}{)}
+\end{Verbatim}
+
+
+    Une fonction très utile afin d'avoir un sommaire rapide sur les données
+est \texttt{summary}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}70}]:} \PY{k+kp}{summary}\PY{p}{(}Cars93\PY{p}{)}
+\end{Verbatim}
+
+
+    
+    \begin{verbatim}
+    Manufacturer     Model         Type      Min.Price         Price      
+ Chevrolet: 8    100    : 1   Compact:16   Min.   : 6.70   Min.   : 7.40  
+ Ford     : 8    190E   : 1   Large  :11   1st Qu.:10.80   1st Qu.:12.20  
+ Dodge    : 6    240    : 1   Midsize:22   Median :14.70   Median :17.70  
+ Mazda    : 5    300E   : 1   Small  :21   Mean   :17.13   Mean   :19.51  
+ Pontiac  : 5    323    : 1   Sporty :14   3rd Qu.:20.30   3rd Qu.:23.30  
+ Buick    : 4    535i   : 1   Van    : 9   Max.   :45.40   Max.   :61.90  
+ (Other)  :57    (Other):87                                               
+   Max.Price       MPG.city      MPG.highway                  AirBags  
+ Min.   : 7.9   Min.   :15.00   Min.   :20.00   Driver & Passenger:16  
+ 1st Qu.:14.7   1st Qu.:18.00   1st Qu.:26.00   Driver only       :43  
+ Median :19.6   Median :21.00   Median :28.00   None              :34  
+ Mean   :21.9   Mean   :22.37   Mean   :29.09                          
+ 3rd Qu.:25.3   3rd Qu.:25.00   3rd Qu.:31.00                          
+ Max.   :80.0   Max.   :46.00   Max.   :50.00                          
+                                                                       
+ DriveTrain  Cylinders    EngineSize      Horsepower         RPM      
+ 4WD  :10   3     : 3   Min.   :1.000   Min.   : 55.0   Min.   :3800  
+ Front:67   4     :49   1st Qu.:1.800   1st Qu.:103.0   1st Qu.:4800  
+ Rear :16   5     : 2   Median :2.400   Median :140.0   Median :5200  
+            6     :31   Mean   :2.668   Mean   :143.8   Mean   :5281  
+            8     : 7   3rd Qu.:3.300   3rd Qu.:170.0   3rd Qu.:5750  
+            rotary: 1   Max.   :5.700   Max.   :300.0   Max.   :6500  
+                                                                      
+  Rev.per.mile  Man.trans.avail Fuel.tank.capacity   Passengers   
+ Min.   :1320   No :32          Min.   : 9.20      Min.   :2.000  
+ 1st Qu.:1985   Yes:61          1st Qu.:14.50      1st Qu.:4.000  
+ Median :2340                   Median :16.40      Median :5.000  
+ Mean   :2332                   Mean   :16.66      Mean   :5.086  
+ 3rd Qu.:2565                   3rd Qu.:18.80      3rd Qu.:6.000  
+ Max.   :3755                   Max.   :27.00      Max.   :8.000  
+                                                                  
+     Length        Wheelbase         Width        Turn.circle   
+ Min.   :141.0   Min.   : 90.0   Min.   :60.00   Min.   :32.00  
+ 1st Qu.:174.0   1st Qu.: 98.0   1st Qu.:67.00   1st Qu.:37.00  
+ Median :183.0   Median :103.0   Median :69.00   Median :39.00  
+ Mean   :183.2   Mean   :103.9   Mean   :69.38   Mean   :38.96  
+ 3rd Qu.:192.0   3rd Qu.:110.0   3rd Qu.:72.00   3rd Qu.:41.00  
+ Max.   :219.0   Max.   :119.0   Max.   :78.00   Max.   :45.00  
+                                                                
+ Rear.seat.room   Luggage.room       Weight         Origin              Make   
+ Min.   :19.00   Min.   : 6.00   Min.   :1695   USA    :48   Acura Integra: 1  
+ 1st Qu.:26.00   1st Qu.:12.00   1st Qu.:2620   non-USA:45   Acura Legend : 1  
+ Median :27.50   Median :14.00   Median :3040                Audi 100     : 1  
+ Mean   :27.83   Mean   :13.89   Mean   :3073                Audi 90      : 1  
+ 3rd Qu.:30.00   3rd Qu.:15.00   3rd Qu.:3525                BMW 535i     : 1  
+ Max.   :36.00   Max.   :22.00   Max.   :4105                Buick Century: 1  
+ NA's   :2       NA's   :11                                  (Other)      :87  
+    \end{verbatim}
+
+    
+    Ça nous donne les variables trouvées dans cette base de données ainsi
+qu'une statistique descriptive sur chacune des variables
+
+\begin{longtable}[]{@{}l@{}}
+\toprule
+Min.\tabularnewline
+\midrule
+\endhead
+1st Qu.\tabularnewline
+Median\tabularnewline
+Mean\tabularnewline
+3rd Qu.\tabularnewline
+Max.\tabularnewline
+\bottomrule
+\end{longtable}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}71}]:} \PY{k+kp}{head}\PY{p}{(}Cars93\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{tabular}{r|lllllllllllllllllllllllllll}
+ Manufacturer & Model & Type & Min.Price & Price & Max.Price & MPG.city & MPG.highway & AirBags & DriveTrain & ⋯ & Passengers & Length & Wheelbase & Width & Turn.circle & Rear.seat.room & Luggage.room & Weight & Origin & Make\\
+\hline
+	 Acura              & Integra            & Small              & 12.9               & 15.9               & 18.8               & 25                 & 31                 & None               & Front              & ⋯                  & 5                  & 177                & 102                & 68                 & 37                 & 26.5               & 11                 & 2705               & non-USA            & Acura Integra     \\
+	 Acura                & Legend               & Midsize              & 29.2                 & 33.9                 & 38.7                 & 18                   & 25                   & Driver \& Passenger & Front                & ⋯                    & 5                    & 195                  & 115                  & 71                   & 38                   & 30.0                 & 15                   & 3560                 & non-USA              & Acura Legend        \\
+	 Audi               & 90                 & Compact            & 25.9               & 29.1               & 32.3               & 20                 & 26                 & Driver only        & Front              & ⋯                  & 5                  & 180                & 102                & 67                 & 37                 & 28.0               & 14                 & 3375               & non-USA            & Audi 90           \\
+	 Audi                 & 100                  & Midsize              & 30.8                 & 37.7                 & 44.6                 & 19                   & 26                   & Driver \& Passenger & Front                & ⋯                    & 6                    & 193                  & 106                  & 70                   & 37                   & 31.0                 & 17                   & 3405                 & non-USA              & Audi 100            \\
+	 BMW                & 535i               & Midsize            & 23.7               & 30.0               & 36.2               & 22                 & 30                 & Driver only        & Rear               & ⋯                  & 4                  & 186                & 109                & 69                 & 39                 & 27.0               & 13                 & 3640               & non-USA            & BMW 535i          \\
+	 Buick              & Century            & Midsize            & 14.2               & 15.7               & 17.3               & 22                 & 31                 & Driver only        & Front              & ⋯                  & 6                  & 189                & 105                & 69                 & 41                 & 28.0               & 16                 & 2880               & USA                & Buick Century     \\
+\end{tabular}
+
+
+    
+    \hypertarget{plus-de-resources}{%
+\section{Plus de resources}\label{plus-de-resources}}
+
+    \begin{itemize}
+\item
+  \textbf{The R Project for Statistical Computing}:
+  (http://www.r-project.org/) Premier lieu où.
+\item
+  \textbf{The Comprehensive R Archive Network}:
+  (http://cran.r-project.org/) C,est là ou se trouve le logiciel R, avec
+  des miliers de \emph{packages}, il s,y trouve aussi des exemples et
+  même des livres!
+\item
+  \textbf{R-Forge}: (http://r-forge.r-project.org/) Une autre place où
+  des \emph{packages} sont sauvegardé, on y trouve aussi des
+  \emph{packages} tout récemment développés
+\item
+  \textbf{Rlanguage reddit}: (https://www.reddit.com/r/Rlanguage) On y
+  trouve toutes sortes d'informations ou question
+  \href{https://www.reddit.com/r/Rlanguage/comments/786y4z/recommended_books/}{exemple}
+\end{itemize}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
