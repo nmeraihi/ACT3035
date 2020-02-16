@@ -162,7 +162,7 @@ mafonc_va_nor <- function(taille, nb_va){
 
 toto <- mafonc_va_nor(15, 1000)
 toto$mongraph
-
+toto
 
 
 

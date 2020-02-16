@@ -55,7 +55,7 @@ model_lm <- lm(Sales ~ Radio + TV, data=adv)
 x_grid <- seq(from=min(adv$Radio), to=max(adv$Radio), length=100)
 y_grid <- seq(from=min(adv$TV), to=max(adv$TV), length=200)
 z_grid <- expand.grid(x_grid, y_grid) %>%
-  tbl_df() %>%
+  tibble::as_tibble() %>%
   rename(
     x_grid = Var1,
     y_grid = Var2
@@ -88,8 +88,35 @@ plot_ly(showscale=FALSE) %>%
   )
 
 
+# sélection de variables
+library(leaps)
+forward <- regsubsets(Sales~., adv, nvmax=7, method = "forward")
+backward <- regsubsets(Sales~., adv, nvmax=7, method = "backward")
+
+which.min(summary(forward)$cp)
+coef(forward, 2)
+
+which.min(summary(backward)$cp)
+coef(backward, 2)
+
+Credit <- read.csv("https://raw.githubusercontent.com/nmeraihi/data/master/islr/Credit.csv")
+Credit <- Credit[-1]
+head(Credit)
+
+Credit$Gender <- as.factor(Credit$Gender)
+Credit$Student <- as.factor(Credit$Student)
+Credit$Married <- as.factor(Credit$Married)
+Credit$Ethnicity <- as.factor(Credit$Ethnicity)
+
+library(GGally)
+ggpairs(Credit, 1:5)
+
+fit.lm_gender <- lm(Balance~Gender, data=Credit)
+summary(fit.lm_gender)
 
 
+fit.lm_eth <- lm(Balance~Ethnicity, data=Credit)
+summary(fit.lm_eth)
 
 
 
