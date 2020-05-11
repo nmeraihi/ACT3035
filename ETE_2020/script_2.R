@@ -39,6 +39,41 @@ vect_MSRP_tx <- vect_MSRP*1.05*1.095
 vect_MSRP_tx == vect_MSRP
 
 all(vect_MSRP_tx == vect_MSRP)
+!all(vect_MSRP_tx == vect_MSRP)
+
+"bonjour"!="bonjour"
+
+rep("bonjour act3035", 25)
+
+?rep
+
+x <- c(1,2,5,7,0,2,4,1,5)
+y <- seq(1.1, 2, .1)
+z <- x**2/-.5
+x
+y
+z
+
+
+length(x)
+min(x)
+max(x)
+
+min(x, z)
+
+mean(x)
+sd(x)
+var(x)
+
+A <- matrix(1:12, 4,3)
+A <- matrix(1:12, nrow=4,ncol=3, byrow = T)
+A
+
+t(A)
+
+
+
+
 
 
 
