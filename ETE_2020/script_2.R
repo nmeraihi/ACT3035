@@ -71,9 +71,71 @@ A
 
 t(A)
 
+dim(A)
+nrow(A)
+ncol(A)
+
+dim(A)[2]
+
+A[3,2]
+
+A[1,]
+
+A[,2]
+A[,2:3]
 
 
+diag(5)
 
+
+A
+A**2
+
+rbind(A, A**2)
+AA_c <- cbind(A, A**2)
+
+summary(AA_c)
+
+runif(1)
+runif(10)
+
+set.seed(3035)
+runif(10)
+
+
+set.seed(3035)
+runif(10, 55,58)
+
+
+x <- runif(100, 0,1)
+
+B <- matrix(x, 10)
+B
+
+sample(x, 5)
+
+set.seed(123)
+sample(1:10, 5)
+
+sample(1:10, 15, replace = T)
+
+set.seed(123)
+y <- sample(1:5, 1000, replace = T)
+
+table(y)
+
+set.seed(123)
+y <- sample(1:5, 1000, replace = T, 
+            prob = c(.2,.5, .1,.1,.1))
+
+table(y)
+
+rnorm(100)
+rnorm(100, 0, 100)
+
+z <- rnorm(10000, 50, 100)
+mean(z)
+sd(z)
 
 
 
