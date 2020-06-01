@@ -61,7 +61,7 @@ order(df$nbsin)
 library(dplyr)
 df <- read.csv("https://raw.githubusercontent.com/nmeraihi/data/master/assurance.csv")
 head(df)
-
+View(df)
 colnames(df)
 arrange(df, desc(nbsin), annee_permis)
 
@@ -78,6 +78,7 @@ df %>%
   filter(type_territoire=="Rural") %>% #g
   filter(numeropol>1500) #f
 
+library(dplyr)
 df %>% 
   group_by(type_territoire, sexe) %>% 
   summarise(nbsinTot=sum(nbsin))
@@ -86,6 +87,21 @@ df %>%
 # ainsi que le coût total
 # par profession et par fréquence de pmt, 
 # seulement pour les véhicules munis d'une alarme, 
+
+df %>% select(nbsin, 
+               cout1, cout2, cout3, cout4,
+               type_prof, 
+               freq_paiement, 
+               presence_alarme) %>% 
+  filter(presence_alarme==1) %>% 
+  group_by(type_prof, freq_paiement) %>% 
+  summarise(nbsinTot=sum(nbsin, na.rm = T), 
+            couTot=sum(cout1,cout2,cout3,cout4, na.rm = T))
+
+colnames(df)
+
+
+
 
 un_bonjour <- "bonjour"
 salutation <- c("Bonjour", "Hi", "Hello")
