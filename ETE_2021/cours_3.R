@@ -93,20 +93,28 @@ ifelse(argument_1>argument_2, print("argument_1 > argument_2"),
               print("egal"))
        )
 
+for (j in 1:100) {print("bonjour")
+}
+
+for (i in 1:15) {
+  print(i**2)
+}
+
+
+for (i in 1:7) {
+  if(i==5){next}
+  print(i)
+}
+
+for (i in 1:7) {
+  if(i==5){break}
+  print(i)
+}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+# c(mu_1, mu_2, ...., mu_1000)
+# chaque mu est une moyenne de 100 vpa rnorm centrée réduite
 
 
