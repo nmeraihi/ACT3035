@@ -143,3 +143,52 @@ temps_vect_preci <- system.time(
   })
 
 temps_vect_preci
+
+
+# nomDeLaFonction <- function(arguments de la fincation){
+#   ce que la fonction fait
+# }
+
+
+multiplication2Trucs <- function(truc_1, truc_2){
+  resultat=truc_1*truc_2
+  return(resultat)
+}
+
+multiplication2Trucs(3,3)
+
+
+divise2Trucs <- function(truc_1, truc_2){
+  if (truc_2!=0) {return(truc_1/truc_2)
+  }else {print("truc_2 doit être différent de 0")}
+}
+
+divise2Trucs(2,1)
+
+divise2Trucs(2,0)
+
+divise2Trucs("2",1)
+
+
+
+
+diviseEtMultiplie2Trucs <- function(truc_1, truc_2){
+  if (truc_2!=0) {list(truc_1/truc_2, truc_1*truc_2)
+  }else {print("truc_2 doit être différent de 0")}
+}
+
+diviseEtMultiplie2Trucs(2,2)[2]
+
+?select
+
+# ce qu'une fonction doit inclure dans le sommaire de documentation:
+# 1- résumé de ce que la fonction fait
+# 2- arguments qye ça prend
+# 3- ce que la fonction retourne comme résultats
+
+
+
+
+
+
+
