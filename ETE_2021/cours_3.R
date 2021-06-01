@@ -188,7 +188,14 @@ diviseEtMultiplie2Trucs(2,2)[2]
 
 
 
+diviseEtMultiplie2Trucs <- function(truc_1=1, truc_2=1){
+  if (truc_2!=0) {list(truc_1/truc_2, truc_1*truc_2)
+  }else {print("truc_2 doit être différent de 0")}
+}
+diviseEtMultiplie2Trucs()
 
+setwd("~/Desktop/ACT3035E21/")
 
+save(moyennes, file = "moyennes.RData")
 
-
+load("moyennes.RData")
