@@ -114,7 +114,32 @@ for (i in 1:7) {
 
 
 
-# c(mu_1, mu_2, ...., mu_1000)
+# moyennes <- c(mu_1, mu_2, ...., mu_1000)
 # chaque mu est une moyenne de 100 vpa rnorm centrée réduite
 
+moyennes <- NULL
+for(i in 1:1000){
+  mu <- mean(rnorm(100))
+  moyennes <- rbind(moyennes, mu)
+}
+plot(moyennes)
 
+
+
+moyennes <- NULL
+temps_vect_NULL <- system.time(
+for(i in 1:15000){
+  mu <- mean(rnorm(100))
+  moyennes <- rbind(moyennes, mu)
+})
+
+temps_vect_NULL
+
+moyennes <- numeric(length = 15000)
+temps_vect_preci <- system.time(
+  for(i in 1:15000){
+    mu <- mean(rnorm(100))
+    moyennes[i] <- mu
+  })
+
+temps_vect_preci
