@@ -46,6 +46,67 @@ gsub("vehicule", "véhicule", phrase_2)
 
 ?read.csv()
 
+Sys.Date()
+Sys.time()
+
+Sys.Date()+1
+
+Sys.Date()-81
+
+weekdays(Sys.Date())
+
+months(Sys.Date()+1)
+
+file.exists("csv_test.csv")
+
+file.exists("csv_test.txt")
+
+file.rename("csv_test.csv", "csv_prod.csv")
+file.create("code_python.py")
+
+list.files()
+
+file.info("csv_prod.csv")
+
+file.info("csv_prod.csv")$size
+
+setwd("~/Downloads")
+
+file.path("csv_prod.csv" )
+
+5>1
+
+if (5>11) { print("C'est vrai")
+} else {
+  print("C'est faux")    
+  }
+
+# syntaxe
+if (condition) {
+  vrai
+}
+argument_1 <- 11
+argument_2 <- 11
+ifelse(argument_1>argument_2, print("argument_1 > argument_2"), 
+       ifelse(argument_1<argument_2, 
+              print("argument_1 < argument_2"), 
+              print("egal"))
+       )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
