@@ -1,0 +1,62 @@
+---
+title: "ACT3035 intro à RMarkdown"
+author: "nmeraihi"
+date: "2023-10-25"
+output:
+  html_document: default
+  keep_md: true
+bibliography: reference.bib
+---
+
+```{r, echo=FALSE}
+setwd("C:/Users/meraihi_n/Desktop/ACT3035")
+```
+
+
+# Exemple 1
+## Corrélation en assurance vie
+
+### Lecture des données
+Le code ci-dessous permet de lire les donées se trouvant dans GitHub dans le [répertoire](https://github.com/nmeraihi/data)
+
+```{r, cache=TRUE}
+insurance <- read.csv("https://raw.githubusercontent.com/nmeraihi/data/master/insurance.csv")
+```
+Voici un apperçu des **6 première** variables se trouvant dans le tableau ~~(1)~~:
+
+```{r}
+head(insurance)
+```
+
+Nous avons sélectionné les variables d'intérêt afin de tracer un graphique qui illustre la corrélation entre les variables d'intrêt. Ce graphique nécessite la librairie `library(psych).`
+
+```{r, echo=FALSE}
+library(psych)
+```
+Les variable sélectionnées sont: 
+
+* age
+- bmi
+- children
+- charges
+
+ou liste numérotée:
+
+1. age
+2. bmi
+3. children
+4. charges
+
+```{r}
+pairs.panels(insurance[c("age", 
+                           "bmi", 
+                           "children", 
+                           "charges")])
+```
+
+
+
+
+
+
+
