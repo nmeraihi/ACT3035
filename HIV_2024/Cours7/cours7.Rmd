@@ -1,0 +1,191 @@
+---
+title: "Cours 7 ACT3035"
+output:
+  html_notebook: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+Ceci est un cours pour introduire les concepts et syntaxe du R Markdow avec un exemple concret de régression linéaire. Le matériel nécessaire pour la syntaxe se trouve dans [ACT3035](https://nmeraihi.github.io/act3035book/sommaire.html).
+
+Pour débuter avec cet exemple concret, allons chercher les donnes `flight_delay.csv` dans le repo [ACT3035H24](https://github.com/nmeraihi/ACT3035/tree/master/HIV_2024).
+
+## Ecploration des données 
+
+Nous allons essayer de prédire les retards d'avions en appliquant une régression lin multiple sur les données `flight_delay.csv` de type $y_{i}=\beta _{0}+\beta _{1}x_{i1}+\cdots +\beta _{p}x_{ip}+\varepsilon _{i}=\mathbf {x} _{i}^{\mathsf {T}}{\boldsymbol {\beta }}+\varepsilon _{i}$
+
+```{r}
+data1 <- read.csv("https://raw.githubusercontent.com/nmeraihi/ACT3035/master/HIV_2024/flight_delay.csv")
+```
+Rgegardons ensuite les première observations des ces données
+
+```{r}
+head(data1)
+```
+Maintenant regardons quelles sont les dimensions de ce jeux de données:
+
+```{r}
+dim(data1)
+```
+affichons les statistiques descriptives de la variable réponse `Arr_Delay`:
+
+```{r}
+summary(data1$Arr_Delay)
+```
+Regardons la corrélation **Pearson** des deux variables `Arr_Delay` et `Number_of_flights`.
+
+```{r}
+corr <- cor.test(data1$Arr_Delay, data1$Number_of_flights, method = "pearson")
+corr
+```
+On voit bien qu'il existe une forte corrélation de l'orde de `r toString(round(corr$estimate,4))` entre nos deux variable d'intérêt Arr_Delay` et `Number_of_flights`
+
+## Graphiques
+
+Allons maintenant tracer quelques graphiques de type nuage de points sur la variable dépondantes avec d'autres variable dans mon jeu de données. 
+
+### Arr_Delay vs Number_of_flights
+
+```{r}
+plot(data1$Arr_Delay, data1$Number_of_flights)
+```
+
+### Arr_Delay vs Security_o
+
+```{r include=FALSE}
+library(ggplot2)
+```
+
+
+
+```{r}
+ggplot(data1, aes(x=Arr_Delay, y=Security_o))+
+  geom_point()+
+  theme_bw()+
+  ggtitle("Retard d'arrivées vs Sécurité_o")
+
+```
+### Arr_Delay vs Support_Crew_Available
+
+```{r}
+ggplot(data1, aes(x=Arr_Delay, y=Support_Crew_Available))+
+  geom_point()+
+  theme_bw()+
+  ggtitle("Retard d'arrivées vs Support_Crew_Available")
+```
+
+### Arr_Delay vs Airport_Distance
+
+```{r}
+ggplot(data1, aes(x=Arr_Delay, y=Airport_Distance))+
+  geom_point()+
+  theme_bw()+
+  ggtitle("Retard d'arrivées vs Airport_Distance")
+```
+
+
+## Modéliation
+
+Supprimons d'abord la première variable `Carrier` et copions je de données dans un autre _data frame_ appelé `data2`.
+
+```{r}
+data2 <- data1[-c(1)]
+```
+Regardons donc les première observations de ce jeu données:
+
+```{r}
+head(data2)
+```
+
+```{r}
+dimension <- dim(data2)
+```
+Nous avons donc maintenant `r toString(dimension[1])` obesrvations sur `r toString(dimension[2])` variables.
+
+### Division des données
+
+Nous allons maintenant diviser nos données en deux parties, soient un échantillons aléatoire afin d'ajuster le modèle de régression liné multiples. L'autres partie restante des données, servira à tester la performance de notre modèle.
+
+
+Pour cela, nous avons besoin d'un _package_ appelé `caTools`
+
+```{r install_package, eval=FALSE, include=FALSE}
+install.packages("caTools")
+library(caTools)
+```
+
+Afin de répéter cette expérience avec les mêmes résultats, nous allons fixer notre seed à 3035.
+
+```{r}
+set.seed(3035)
+```
+Faisons un tirage aléatoire de 70% des observations de la variable réponse `Arr_Delay`. Cette échantillonage nous servira a diviser toutes les données en deux partie; 70% des données de data2 sera alloué à entraîner le modèle. La partie restante (30%) servira à tester le modèle.
+
+
+```{r}
+sample <- caTools::sample.split(data2$Arr_Delay, SplitRatio = .70)
+train_data <- subset(data2, sample==T)
+test_data <- subset(data2, sample==F)
+```
+
+Ajustons un premier modèle apelé `model` sur toutes les données `train_data`.
+
+```{r}
+model <- lm(Arr_Delay~., data = train_data)
+```
+Voici un apperçu sommaire du modèle:
+
+```{r}
+summary(model)
+```
+Nous remarquons que certaines variales, comme `Cleaning_o`, `Fueling_o` et `Security_o` ne sont pas significatives selon la _P value_, nous allons donc les exclure du modèle amélioré.
+
+
+```{r}
+model_amélioré <- lm(Arr_Delay~Airport_Distance+Number_of_flights+Weather+Support_Crew_Available+Baggage_loading_time+Late_Arrival_o, data=train_data)
+```
+regardons maintenant un apperçu de ce nouveau modèle:
+
+```{r}
+summary(model_amélioré)
+```
+Regardons comment le modèle prédit les valeurs sur les données d'entrainement:
+```{r}
+pred_train <- model_amélioré$fitted.values
+head(pred_train)
+```
+
+Regardons comment mon modèle performe sur les données cachées (test_data). Pour ce faire, nous allons comparer ce que nous avons observer dans ce jeu de données avev ce qui sera prédit par le modèle_améioré qui a été entrainé sur les data_train.
+
+```{r}
+pred_test <- predict(model_amélioré, newdata = test_data)
+```
+
+Insérons ces prédictions dans un nouveau data frame appelé `pred_test_df`.
+
+```{r}
+pred_test_df <- data.frame(pred_test)
+```
+
+Regardons les données observées de l'échantilon test vs les prédiction.
+
+```{r}
+plot(test_data$Arr_Delay, col="red", type="l")
+lines(pred_test_df, col="blue", type="l")
+```
+
+ceci est un exemple du code Latex si on veux écrire l'infini $\infty$ à $\infty$
+
+
+ceci est une liste
+
+* irtem 1
+* item 2
+
+### Courbe ROC
+
+Comparer la performance du modèle avec la courbe ROC.
+
+
+
