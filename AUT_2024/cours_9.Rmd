@@ -1,0 +1,145 @@
+---
+title: "cours_9"
+author: "Noureddine Meraihi"
+date: "2024-10-30"
+output: html_document
+---
+
+```{r, include=F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# KNN: K le plus proches voisins
+## Une approche pratique pour les actuaires
+
+> Une pierre deux coups 
+
+Dans le cadre du cours d'aujourd'hui nous allons apprendre la méthode KNN tout en apprenant comment utiliser les fichier `RMarkdown` avec un nouveau langage d'écriture du text `markdown`.
+
+## Introduction
+
+L'algortihme k-nn est une méthode t'apprrentissage statistique afin de résoudre plusieurs problèmes potentiels comme:
+- La classification des risques en assurance
+- L'évaluation de la probabilité de réclamation
+- La segementation des clients
+
+## Objectif
+Dans ce cours nous allons utiliser la méthode knn pour prédire si un client (assuré) va renouveler sont contrat d'assurance-vie en fonction de divers caractéristiques.
+
+## 1.  Préparartion de l'emvironnement
+
+Nous aurons besoin des bibliothèques suivantes:
+
+```{r, echo=T, results='hide', message=FALSE}
+library(tidyverse)
+library(class)
+library(caret)
+library(scales)
+set.seed(3035)
+```
+
+## 2. Gnérer les données nécessaires
+
+Pour cet exemple, nous allons créer un jeu de données synthétiques qui simule des caractéristiques de clients en assurance-vie.
+
+```{r}
+n <- 1000
+
+donnees <- tibble(
+  age=runif(n, 25, 75),
+  prime_annuelle=rlnorm(n, log(5000), .05),
+  anciennete=rpois(n, 5),
+  nb_reclamation=rpois(n, .5),
+  valeur_contrat=rlnorm(n, log(10000), .7)
+)
+
+```
+Maintenant nous avons besoin de notre variable cible (réponse) qui sera:
+
+$$\frac{1}{1+exp(-(-2+0.03(age-50)+.0001(primeAnuelle-5000)))}\dots$$
+
+```{r}
+donnees <- donnees %>% 
+  mutate(
+    prob_renouvellement=1/(1+exp(-(
+      -2+
+        .03*(age-50)+
+        .0001*(prime_annuelle-5000)+
+        .2*anciennete+
+        -.05*nb_reclamation+
+        .00001*(valeur_contrat-10000)
+    ))),
+    renouvellement=rbinom(n,1, prob_renouvellement)
+  ) %>% 
+  select(-prob_renouvellement)
+```
+Regardons maintenant un apperçu des données générées:
+
+```{r, echo=F}
+head(donnees)
+```
+
+## 3. Analyse eplortoire des données
+
+Avant d'appliquer KNN, explorons un peu nos données pour mieux compredre les relations entres les variables:
+
+D'abord un apperçu statistiques:
+
+```{r}
+summary(donnees)
+```
+
+Ensuite quelques graphiques de distribution des variables numériques par statut de renouvellement:
+
+```{r, echo=F}
+plot_ditribution <- function(data, var, titre){
+  ggplot(data, aes(x=!!sym(var)), fill=factor(renouvellement))+
+    geom_density(alpha=.5)+
+    labs(title = titre,
+         x=var,
+         y="Densité",
+         fill="Renouvellement")+
+    theme_minimal()
+}
+
+p1 <- plot_ditribution(donnees, "age", "Distribution de l'âge" )
+p2 <- plot_ditribution(donnees, "prime_annuelle", "Distribution de la prime annuelle" )
+p3 <- plot_ditribution(donnees, "anciennete", "Distribution de l'ancienneté" )
+
+gridExtra::grid.arrange(p1, p2, p3, ncol=2)
+```
+## 4. Prétraitement des données
+KNN est sensible à l'échelle des variable, nous devons donc normaliser les données. Créons une fonction appelée `normaliser` qui prend en argument $x$, soustrait le minimum et divise par la différence entre le max et le min. 
+
+```{r}
+normaliser <- function(x){
+  return((x-min(x))/(max(x)-min(x)))
+}
+```
+Maintenant, appliquons notre nouvelle fonction à nos données:
+
+```{r}
+donnees_norm <- donnees %>% 
+  mutate(across(-renouvellement, normaliser))
+
+indices_train <- sample(1:length(donnees_norm$renouvellement), size = floor(.8*length(donnees_norm$renouvellement)))
+# indices_train <- createDataPartition(donnees_norm$renouvellement, p=.8, list = F)
+train_data <- donnees_norm[indices_train,]
+test_data <- donnees_norm[-indices_train,]
+
+X_train <- train_data %>% select(-renouvellement) %>% as.matrix()
+y_train <- train_data$renouvellement
+X_test <- test_data %>% select(-renouvellement) %>% as.matrix()
+y_test <- test_data$renouvellement
+```
+
+## 5. Application du KNN
+Nous allons utiliser la fonction la plus simple du knn d'abord, sans aller dans les détails:
+
+```{r, results='hide'}
+knn(X_train, X_test, cl=factor(y_train), k=3, prob = T)
+```
+# Conclusion
+Dans ce cours, nous avons vu comment préparer et analyser les données pour appliquer l'algorithme KNN d'une manière très simples sans aller dans les détails de l'algorithme qui sortent du cadre du cours ACT3035. Toutefois, ça nous a appris à écrire du code markdown et compliler le tout dans un fichier markdow.
+
+
+
