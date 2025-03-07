@@ -1,0 +1,133 @@
+---
+title: "Régression logistique"
+author: "Noureddine Meraihi"
+date: "2025-02-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction au Markdown
+ceci est un texte comme on écrit d'habitude. Pour mettre un mot en cara **gras** et tout ce qui est _italique_. Un url vers une page web ou référence dans le fichier même est comme ceci [examengo application](https://app.examengo.com/). 
+Pour tout ce qui image, on peut l'inétégrer dans comme un url sauf un point `!` qui le précède. Par exemple dans la figure ci-dessous on peut voir les code `LaTex` des expression actuarielles:
+
+![expression actuarielle](https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Actuarial_notation.svg/220px-Actuarial_notation.svg.png)
+
+## Classifaction
+Tous les détails du contene du cours se trouve dans le manuel en ligne d'[ACT3035](https://nmeraihi.github.io/act3035book/R/08_regression/2_Classification.html#peut-on-utiliser-la-regression-lineaire)
+
+### Exemple
+Faisons une simulation de 1000 observation sur les données d'assurés en assurance vie.
+
+La variable répones (ce qu'on veut prédire) prends les valeur 0 ou 1, ça représente si l'assuré fera une réclamation (1) ou pas (0).
+
+
+
+Nou aurons besoins des libraires suivante dans le cadre de ce chapuitre.
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(caret)
+```
+
+
+
+
+```{r}
+nb_assurés <- 1000
+p_fummeur <- .12
+donnees <- tibble(
+  age = runif(nb_assurés, 20, 70),
+  imc=rnorm(nb_assurés, 25, 5),
+  tension_art=rnorm(nb_assurés, 120, 15),
+  cholest=rnorm(nb_assurés, 200, 30), 
+  fummeur=sample(c("oui", "non"), nb_assurés, replace = T, prob = c(p_fummeur, 1-p_fummeur)),
+  antecedent_fami=sample(c("oui", "non"), nb_assurés, replace = T),
+  frequence_exercices=sample(c("faible", "moyenne", "élevée"), nb_assurés, replace = T)
+  
+)
+
+
+```
+
+Regardons un apperçu sur les données générées
+
+```{r}
+head(donnees)
+```
+
+
+
+Ajoutons la variable variable réponse `reclamation` qui va être la cible dans notre modèle de régression logistique.
+
+```{r}
+
+donnees <- donnees %>% 
+  mutate(
+    prob_de_reclamation=.01+
+      .001*(age-20)+
+      .02*(imc-25)+
+      .002*(tension_art-120)+
+      .001*(cholest-200)+
+      .1*(fummeur=="oui")+
+      .05*(antecedent_fami=="oui")-
+      .05*(frequence_exercices=="élevée"),
+reclamation=rbinom(nb_assurés, 1, prob_de_reclamation)
+) %>% select(-prob_de_reclamation)
+```
+Maintenant nous allons ajuster ce modèle sur une partie des données, appelées les données _train_ et testons le modèle sur l'autre partie restante qui nous servirons à tester justesse de notre modèle.
+
+Mais avant nous devons d'abord encoder nos données
+
+```{r}
+donnees_encod <- donnees %>% 
+  mutate(across(where(is.character), as.factor)) %>% 
+  filter(!is.na(reclamation))
+```
+
+Nous allons séparer les données verticalenet en matrice et vecteur de la variable réponse
+
+```{r}
+X=donnees_encod %>% select(-reclamation)
+Y=donnees_encod$reclamation
+```
+
+Maintenant que nous avons les deux matrices, séparons en 80 données train vs 20 données test,
+
+```{r}
+indice_repartion <- sample(1:length(Y), size = floor(.8*length(Y)))
+X_train <- X[indice_repartion, ]
+X_test <- X[-indice_repartion, ]
+Y_train <- Y[indice_repartion]
+Y_test <- Y[-indice_repartion]
+```
+Maintenanat nous somme prêt d'ajuster le modèle de régression logisyique sur les réclamation (oui, ou non)
+
+
+```{r}
+model_rl <- glm(reclamation~., cbind(X_train, reclamation=Y_train),family = binomial())
+```
+
+Regardons maintenant ce que notre modèle dit:
+
+```{r}
+summary(model_rl)
+```
+
+
+Afin de faire des prédiction futur, nous avons qu'insérer les information dans la fonction `predict`
+
+
+
+
+
+
+
+
+
+
+
+
+
