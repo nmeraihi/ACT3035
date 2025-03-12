@@ -59,7 +59,7 @@ summary(model_lm)
 
 install.packages("caTools")
 library(caTools)
-set.seed(3035)
+set.seed(123)
 split <- sample.split(insurance$charges, SplitRatio = .7)
 training_set <- subset(insurance, split==T)
 test_set <- subset(insurance, split==F)
