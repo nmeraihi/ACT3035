@@ -7,24 +7,32 @@
 
 3
 
+#Addition
 1+1
 
+#Soustraction
 2-1
 
+#Multiplication
 2*1
 
+#Division
 2/1
 
-
+#Exposant
 2^2
 2**2
 
+#exponentiel
 exp(1)
 
+#logarithme
 log(1, base = 10)
 
+#Priorité d'opération
 (2+ 1) * 2
 
+#Valeur numérique enregistré 
 pi
 
 
@@ -42,7 +50,6 @@ y
 # Alt + - = <- 
 
  
-
 x <- 3
 x
 
@@ -54,6 +61,7 @@ x+y
 #Case sensitive 
 
 X
+
 
 x <-  y 
 
@@ -89,6 +97,9 @@ num <- 25
 class(num)
 class(25)
 
+num.decimal <- 1.5 
+class(num.decimal)
+
 #string/character
 string <- "bonjour"
 string
@@ -101,10 +112,12 @@ class(string2)
 
 
 # booléen 
-booleenT <-TRUE
+booleenT <- TRUE
 booleenT2 <- T 
+stringbooleen <- "TRUE"
 
 booleenT
+stringbooleen
 booleenT2
 
 booleenF <-  FALSE 
@@ -132,10 +145,12 @@ is.character(num)
 
 # Changement de type 
 
-
 num
 
 as.character(num)
+
+as.character(num) + 25
+
 class(as.character(num))
 
 
@@ -145,7 +160,7 @@ string
 
 as.numeric(string)
 
-as.numeric(as.character(num))
+as.numeric("25")
 
 
 
@@ -157,9 +172,11 @@ as.numeric(booleenF)
 as.logical(1)
 as.logical(0)
 
+as.logical(25)
 
 # Test équation
 
+#superieur/inferieur
 num <100
 
 num <= 100 
