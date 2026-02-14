@@ -20,7 +20,11 @@ min_2(numeric_vec)
 
 
 min_2 <- function(vecteur) {
+  
+  #On retire le minimum
   vecteur_nomin <- vecteur[vecteur != min(vecteur)]
+  
+  #On retourne le nouveau minimum 
   return(min(vecteur_nomin))
 }
 
