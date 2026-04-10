@@ -1,0 +1,285 @@
+* faire un commentaire ;
+
+/* faire un commentaire */
+
+
+filename emprunt '/home/u64421497/sasuser.v94/ACT3035/Data/emprunt_bancaire.csv';
+
+
+data work.emprunt_data;
+infile emprunt dsd firstobs=2; *dsd = Delimiter-Sensitive Data ;
+length Loan_ID $ 50 education $ 50 ;
+input Loan_ID $ loan_status $ Pricipal terms age education $ Gender$ ;
+run;
+
+
+data emprunt_data_2;
+infile emprunt dsd firstobs=2; *dsd = Delimiter-Sensitive Data ;
+length Loan_ID $ 50 education $ 50 ;
+input Loan_ID $ loan_status $ Pricipal terms age education $ Gender$ ;
+run;
+
+
+proc print data= work.emprunt_data_2 ;
+run;
+
+proc print data= work.emprunt_data_2 noobs; *Enelever l'index; 
+run;
+
+
+
+
+*** Creation de donnée ; 
+
+data data_creation; 
+infile datalines dsd;
+length code_perm $ 50;
+input code_perm examen1 examen2 examen3;
+datalines;
+  "Diane Rossi",67,68,70
+    "Stéphanie de la Gonzalez",72,81,87
+    "Thierry Lacroix",73,87,86
+    "Jérôme Blanc-Moreno",73,66,77
+    "Danielle Le Guyon",81,73,84
+    "Alfred Adam",73,79,82
+    "Chantal Mahe",75,77,69
+    "Eugène Dupont",81,80,83
+    "Bertrand Pages Le Didier",86,77,75
+    "Guy Gillet de la Valette",78,69,80
+    ;
+ run; 
+ 
+ 
+ 
+/* Comment créer une bibliotheque permanante */ 
+
+libname donnees '/home/u64421497/sasuser.v94/ACT3035/Data';
+ 
+
+title 'Sommaire jeu de donnée creation';
+proc contents data = work.data_creation;
+run;
+
+title 'Sommaire de tous les jeux de données de la librarie donnees';
+proc contents data = work._all_nods ;
+run;
+
+
+
+* commande data set ; 
+
+
+data donnees.emprunt_data_2;
+set work.emprunt_data;
+run; 
+
+
+proc print data = donnees.emprunt_data_2;
+run;
+
+
+proc print data = donnees.emprunt_data_2 (firstobs=3 obs=6);
+run;
+
+
+*commande where ; 
+
+
+data donnees.emprunt_data_where;
+set work.emprunt_data;
+where education = 'college';
+run; 
+
+* commande like ; 
+
+data donnees.emprunt_data_like;
+set work.emprunt_data;
+where education like '%or%' ;
+run; 
+
+
+* commande and ; 
+
+
+data donnees.emprunt_data_and;
+set work.emprunt_data;
+where education like '%or%' and gender = 'male';
+run; 
+
+*Different de ;
+data donnees.emprunt_data_where;
+set work.emprunt_data;
+where age <=45;
+run; 
+
+
+*Creation d'une nouvelle variable; 
+
+data donnees.emprunt_age10;
+set donnees.emprunt_data_2;
+age_10 = age+10;
+run;
+
+data donnees.emprunt_ageterm;
+set donnees.emprunt_data_2;
+age_term = sum(age,terms);
+run;
+
+
+proc print data =donnees.emprunt_ageterm;
+format pricipal dollar12.1; *Ici 12 pour l'espace et 0 pour le nombre de décimal;
+run;
+
+
+
+* Commande keep ; 
+
+
+data donnees.emprunt_data_keep;
+set work.emprunt_data;
+keep pricipal age gender terms;
+run; 
+
+
+
+
+* Commande drop ;
+
+
+data donnees.emprunt_data_drop;
+set work.emprunt_data;
+drop pricipal age gender terms;
+run; 
+
+
+
+proc freq data = work.emprunt_data;
+tables Gender;
+run;
+
+
+
+
+proc freq data = work.emprunt_data;
+tables Gender/nocum nopercent;
+run;
+
+
+* creation sous-ensemble data; 
+
+
+data work.hommes work.femmes;
+set work.emprunt_data;
+
+if gender = 'female' then output femmes;
+else if gender = 'male' then output hommes;
+
+run;
+
+
+
+data work.hommes work.femmes;
+set work.emprunt_data;
+
+if gender = 'female' then output femmes;
+else output hommes;
+
+run;
+
+
+*fusionner base de données (rbind) ; 
+
+data hommes_femmes; 
+set work.hommes work.femmes;
+run;
+
+
+
+proc sort data = hommes_femmes;
+by age;
+run;
+
+
+
+*renommer ;
+
+data donnees.emprunt_data_rename;
+set work.emprunt_data;
+rename Loan_ID = Numero_ID;
+run; 
+
+
+
+*Exemple pour merge ; 
+
+data NAS_1;
+    input SS: 9. 
+        DOB:  MMDDYY10. 
+        Gender : $1.;
+   FORMAT DOB  MMDDYY10.; *Pour l'affichage;
+    DATALINES;
+    332211009 11/14/1993 M
+    123456789 05/17/1983 F
+    987789321 04/01/1991 F
+    ;
+proc print data=NAS_1;
+run; 
+
+data NAS_2;
+    input SS: $11.
+        JobCode:  $13. 
+        Salary : 9.;
+    format Salary dollar12.0;
+    DATALINES;
+    332-21-1009 A10 45123
+    123-45-6789 B5 35400
+    987-78-9321 A20 87900
+    ;    
+
+proc print data=NAS_2 noobs;
+run;
+
+
+
+data NAS_1B ; 
+set NAS_1(rename=(SS=NumSS));
+SS = put(NumSS, ssn11.);
+drop NumSS;
+run; 
+
+proc sort data = NAS_1B;
+by SS;
+run;
+
+
+proc sort data = NAS_2;
+by SS;
+run;
+
+
+
+*Fusion ; 
+
+data fusion;
+merge NAS_1B NAS_2;
+by SS;
+run;
+
+
+
+title 'NAS_1';
+proc print data = NAS_1;
+run;
+
+title 'NAS_2';
+proc print data = NAS_2;
+run;
+
+
+title 'Fusion';
+proc print data = fusion;
+run;
+
+
+
+
