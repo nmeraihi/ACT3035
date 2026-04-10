@@ -1,0 +1,34 @@
+Les Exercices utilise des base de données de la bibliothèque SASHELP.
+
+Exercice 1 : 
+
+A) Créez une table nommée ma_table_cars dans la bibliothèque WORK à partir de SASHELP.CARS.
+B) Utilisez une procédure pour afficher les 10 premières observations uniquement.
+C) Affichez le sommaire (le contenu technique) de cette table.
+
+
+
+
+Exercice 2 :
+
+A) Créez une table voitures_europe qui ne contient que les voitures dont l'origine (Origin) est l'Europe.
+B) Créez une table voitures_hybrides qui contient les voitures dont le modèle (Model) contient le mot "Hybrid".
+
+
+Exercice 3 :
+
+A) À partir de SASHELP.CLASS, créez une table eleves_stats. Créez une nouvelle variable IMC (Indice de Masse Corporelle). 
+B) La formule est :IMC = (Poids x 0.45)/(Taille x 0.025)^2
+Note : Le poids est en livres et la taille en pouces dans SASHELP.CLASS).
+
+
+
+Exercice 4 : 
+A) Créez une table cars_reduite en ne gardant que les variables Make, Model, et MSRP.
+B) Renommez la variable Make en Constructeur et MSRP en Prix_Vente.
+c) Appliquez un format dollar à la variable Prix_Vente
+
+Exercice 5 : 
+A) À partir de SASHELP.CLASS, créez deux tables simultanément : garcons et filles.
+B) Triez les deux tables par la variable Name.Fusion : Créez une petite table manuelle Notes avec les noms de quelques élèves et une colonne Examen. 
+C) Fusionnez cette table avec garcons en utilisant un MERGE par Name.
