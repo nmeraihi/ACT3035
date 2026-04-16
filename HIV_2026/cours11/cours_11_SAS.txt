@@ -1,0 +1,285 @@
+* Structure General d'un proc SQL ;
+
+
+/*
+SELECT column(s)
+    FROM table-name | view-name
+        WHERE expression
+        GROUP BY column(s)
+        HAVING expression
+        ORDER BY column(s);
+QUIT;
+*/
+
+
+
+proc sql outobs=10; /* on détermine le nombre  d'observation à afficher avec outobs=10*/
+title "les données de joueurs de baseball";  /* le titre à afficher */
+    select * /* avec * nous indiquon que bous voulons afficher toutes les colonnes*/
+    from SASHELP.BASEBALL (OBS=10); /* on pourrait mettre aussi (OBS=10) afin 
+    d'indiquer le nombre d'observations à afficher*/ 
+quit;
+
+
+* no label ;
+
+options nolabel;
+
+proc sql;
+title "les données de joueurs de baseball"; 
+    select *
+    from SASHELP.BASEBALL (OBS=20);
+quit;
+
+
+*select ;
+
+proc sql;
+title "les données de joueurs de baseball"; 
+    select name, team
+    from SASHELP.BASEBALL (OBS=20);
+quit;
+
+
+*select changement de nom;
+
+
+proc sql;
+title "les données de joueurs de baseball"; 
+    select name, team, nhits as nombre_frappe
+    from SASHELP.BASEBALL (OBS=20);
+quit;
+
+
+*Creation de variable;
+
+proc sql;
+title "les données de joueurs de baseball"; 
+    select name, team, nhits/natbat as ratio_frappe
+    from SASHELP.BASEBALL ;
+quit;
+
+proc sql;
+title "les données de joueurs de baseball"; 
+    select name, team, sum(nerror, nouts) as n_retrait
+    from SASHELP.BASEBALL ;
+quit;
+
+*changer le format;
+proc sql;
+options nolabel;
+title "les données de joueurs de baseball"; 
+    select name, team, salary format dollar15.0
+    from SASHELP.BASEBALL ;
+quit;
+
+*where;
+
+
+proc sql;
+title "Les joueur qui ont 300 homerun ou plus en carriere et 2000 coup sur (hit)"; 
+    select *
+    from SASHELP.BASEBALL 
+    where CRhome > 300 and CRhits GT 2000 ;
+quit;
+
+* GE Greater or equal (plus grand ou égal)
+GT greater than 
+LE lesser or equal (plus petit ou égal)
+LT lesser than
+NE not equal (ou ^=)
+IN égal a l'un des éléments d'une liste, ex: colonne_1 IN (1,2,3);
+
+
+PROC SQL;
+select *, team
+FROM SASHELP.BASEBALL
+WHERE position like '%B%';
+quit;
+
+
+PROC SQL;
+select *, team
+FROM SASHELP.BASEBALL
+WHERE position like '1%';
+quit;
+
+PROC SQL;
+select *, team
+FROM SASHELP.BASEBALL
+WHERE position like '%B';
+quit;
+
+*condition ou ;
+PROC SQL;
+select team, position
+FROM SASHELP.BASEBALL
+WHERE position like '%B' Or team = 'Montreal';
+quit;
+
+PROC SQL;
+select team, position
+FROM SASHELP.BASEBALL
+WHERE position like '%B' and team in ('Montreal', 'Boston', 'New York');
+quit;
+
+
+
+* GROUP BY ; 
+
+Proc sql; 
+title 'nombre de homerun par équipe en 1986';
+SELECT team, sum(nhome) as sum_homerun
+FROM SASHELP.BASEBALL 
+GROUP BY team;
+quit; 
+
+Proc sql; 
+title 'nombre de homerun par équipe/position en 1986';
+SELECT team, position, sum(nhome) as sum_homerun
+FROM SASHELP.BASEBALL 
+GROUP BY team, position;
+quit; 
+
+
+*Sommaire fonction built-in en SAS 
+
+SUM() -­> somme 
+AVG, MEAN -> moyenne 
+COUNT -­> compte 
+CSS -­> corrected sum of square 
+CV -> coefficient de variation 
+MIN et MAX -> minimum et maximum 
+NMISS -> nombre de valeur manquantes 
+RANGE -­> étendu (range of values)
+STD -­> Écart Type 
+VAR -> Variance ;
+
+
+
+PROC SQL ;
+title "Statistique sommaire par équipe et position"; 
+select team, 
+		count(team) as count_player,
+		nmiss(salary) as n_missing_salary,
+		avg(salary) as mean_salary
+from SASHELP.BASEBALL
+group by team;
+quit;
+
+
+*HAVING; 
+
+Proc sql; 
+title 'nombre de homerun par équipe/position en 1986';
+SELECT team, position, sum(nhome) as sum_homerun, avg(nhome) as mean_nhome
+FROM SASHELP.BASEBALL 
+WHERE natbat > 300
+GROUP BY team, position
+HAVING position like "%B";
+quit; 
+
+
+Proc sql; 
+title 'nombre de homerun par équipe/position en 1986';
+SELECT team, position, sum(nhome) as sum_homerun, avg(nhome) as mean_nhome
+FROM SASHELP.BASEBALL 
+where position like "%B"
+GROUP BY team, position; 
+quit;
+
+
+
+*Doublon; 
+
+proc sql; 
+SELECT distinct league, position
+from SASHELP.BASEBALL; 
+quit; 
+
+
+*Creer variable catégorique ; 
+
+PROC SQL ;
+SELECT name, 
+		position, 
+		team, 
+		nhome, 
+		case 
+		when nhome > 30 then 'Tres bon'
+		when nhome >10 then 'Bon'
+		else 'Pas bon'
+		end as nhome_categorie
+		
+FROM SASHELP.BASEBALL;
+quit;
+
+
+
+*Trier une colonne; 
+
+*Ordre Croissant;
+PROC SQL;
+title "Jeu de données trié par le nombre de courses";
+select name, team, nRuns, nhits
+from SASHELP.BASEBALL
+ORDER BY  nRuns;
+quit;
+
+*Ordre décroissant;
+PROC SQL;
+title "Jeu de données trié par le nombre de courses";
+select name, team, nRuns, nhits
+from SASHELP.BASEBALL
+ORDER BY  nRuns desc;
+quit;
+
+*Ordonner sur plusieurs colonnes; 
+PROC SQL;
+title "Jeu de données trié par le nombre de courses";
+select name, team, nRuns, nhits
+from SASHELP.BASEBALL
+ORDER BY  nRuns desc, nhits;
+quit;
+
+PROC SQL;
+title "Jeu de données trié par le nombre de courses";
+select name, team, nRuns, nhits
+from SASHELP.BASEBALL
+ORDER BY  nRuns desc, nhits desc;
+quit;
+
+*sans selectionner les colonnes ordonées;
+PROC SQL;
+title "Jeu de données trié par le nombre de courses";
+select name, team
+from SASHELP.BASEBALL
+ORDER BY  nRuns desc, nhits desc;
+quit;
+
+
+
+*Creation de dataframe dans l'environnement SAS; 
+
+
+proc sql;
+create table work.procsqldata as(
+SELECT *
+from SASHELP.BASEBALL
+where crruns > 300);
+quit;
+
+
+
+* proc univarate ;
+
+proc univariate data = SASHELP.baseball plots;
+var nhits;
+run; 
+
+
+proc univariate data = SASHELP.baseball plots;
+var nhits;
+histogram nhits / normal;
+inset n mean std min max var / position = ne; 
+run;
