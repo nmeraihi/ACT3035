@@ -1,0 +1,626 @@
+
+*Creation de tables; 
+
+
+proc sql; 
+create table work.A
+ 	(X num, Y num);
+insert into work.A
+	values(1,2)
+	values(2,4);
+	quit;
+	
+	
+proc sql; 
+create table work.B
+ 	(X num, Y num);
+insert into work.B
+	values(2,5)
+	values(3,6)
+	values(4,9);
+	quit;
+	
+	
+*Premier join;
+*Produit cartésien, Cross join; 
+
+proc sql; 
+title 'produit cartésien de la table A et de la table B';
+select *
+from A, B;
+quit;
+
+*Autre facon de le faire; 
+
+proc sql; 
+title ;
+select *
+from A
+CROSS JOIN B;
+quit;
+
+*Inner join ;
+
+proc sql; 
+title 'Inner join de la table A et de la table B';
+select *
+from A, B
+where A.X=B.X;
+quit;
+
+
+proc sql; 
+create table work.C
+ 	(Z num, W num);
+insert into work.C
+	values(2,5)
+	values(3,6)
+	values(4,9);
+	quit;
+
+
+proc sql; 
+title 'Inner join de la table A et de la table C';
+select *
+from A, C
+where X=Z;
+quit;
+
+
+*Importation de Oil prod 
+
+data OilProd;
+   infile datalines delimiter=',';
+   length Country $27 BarrelsPerDay 8;
+   input Country BarrelsPerDay;
+   informat Country $27. BarrelsPerDay comma32.;
+   format Country $27. BarrelsPerDay comma12.;
+datalines;
+Algeria,1400000
+Canada,2500000
+China,3000000
+Egypt,900000
+Indonesia,1500000
+Iran,4000000
+Iraq,600000
+Kuwait,2500000
+Libya,1500000
+Mexico,3400000
+Nigeria,2000000
+Norway,3500000
+Oman,900000
+Saudi Arabia,9000000
+United States of America,8000000
+United Arab Emirates,2000000
+United Kingdom,3000000
+Venezuela,3000000
+USSR (former),7000000
+;
+
+
+data OilRsrvs;
+   infile datalines delimiter=',';
+   length Country $30 Barrels 8;
+   input Country Barrels;
+   informat Country $30. Barrels comma32.;
+   format Country $30. Barrels comma17.;
+datalines;
+Algeria,9200000000
+Canada,7000000000
+China,25000000000
+Egypt,4000000000
+Gabon,1000000000
+Indonesia,5000000000
+Iran,90000000000
+Iraq,110000000000
+Kuwait,95000000000
+Libya,30000000000
+Mexico,50000000000
+Nigeria,16000000000
+Norway,11000000000
+Saudi Arabia,260000000000
+United Arab Emirates,100000000
+United Kingdom,4500000000
+United States of America,30000000000
+Venezuela,65000000000
+USSR (Former),65500000000
+;
+
+
+*Inner join ; 
+
+proc sql ;
+title 'Production et reserve de pétrole par pays'; 
+select * 
+from work.oilprod, work.OilRsrvs
+where oilprod.country = oilrsrvs.country;
+quit;
+
+
+*Avec la commande inner join; 
+
+proc sql; 
+select oilprod.Country, Barrelsperday, barrels as barrel_rsrv
+from work.oilprod
+inner join work.OilRsrvs on oilprod.country = oilrsrvs.country;
+quit;
+
+
+*Donner des surnoms au table; 
+proc sql; 
+select T1.Country, T1.Barrelsperday, T2.barrels as barrel_rsrv
+from work.oilprod AS T1
+inner join work.OilRsrvs AS T2 on T1.country = T2.country
+order by T1.Barrelsperday desc;
+quit;
+
+*changer le label d'une colonne sans changer son vrai nom. ;
+
+proc sql; 
+
+select T1.Country 'Pays', T1.Barrelsperday 'Production', T2.barrels 'Réserves'
+from work.oilprod AS T1
+inner join work.OilRsrvs AS T2 on T1.country = T2.country;
+quit;
+
+
+proc sql; 
+create table merge_oil as(
+select T1.Country 'Pays', T1.Barrelsperday 'Production', T2.barrels 'Réserves'
+from work.oilprod AS T1
+inner join work.OilRsrvs AS T2 on T1.country = T2.country
+);
+quit;
+
+*Import table Country;
+
+data Countries;
+   infile datalines delimiter='#' flowover linesize=90;
+   length Name $35 Capital $35 Population 8 Area 8 Continent $30 UNDate 8;
+   input Name Capital Population Area Continent UNDate @@;
+   informat Name $35. Capital $35. Population best8. Area best8. Continent $30.;
+   format Name Capital $35. Continent $30. Population Area best8.
+      UNDate year4.;
+   label Capital="Capital" Population="Population" Continent="Continent";
+datalines;
+Afghanistan#Kabul#17070323#251825#Asia#-5113#Albania#Tirane#3407400#11100#Europe#-1667
+Algeria#Algiers#28171132#919595#Africa#795#Andorra#Andorra la Vella#64634#200#Europe#12054
+Angola#Luanda#9901050#481300#Africa#6163#Antigua and Barbuda#St. John's#65644#171
+Central America and Caribbean#7865#Argentina#Buenos Aires#34248705#1073518#South America
+-5182#Armenia#Yerevan#3556864#11500#Asia#11688#Australia#Canberra#18255944#2966200
+Australia#-5182#Austria#Vienna#8033746#32400#Europe#-1692#Azerbaijan#Baku#7760064#33400
+Asia#11688#Bahamas#Nassau#275703#5400#Central America and Caribbean#4883#Bahrain#Manama
+591800#300#Asia#4244#Bangladesh#Dhaka#1.2639E8#57300#Asia#5234#Barbados#Bridgetown#258534
+200#Central America and Caribbean#2192#Belarus#Minsk#10508000#80100#Europe#-5182#Belgium
+Brussels#10162614#11800#Europe#-5182#Belize#Belmopan#211069#8900
+Central America and Caribbean#7914#Benin#Porto Novo#5394881#43500#Africa#64#Bermuda
+Hamilton#60594#100# #.#Bhutan#Thimphu#1756214#18100#Asia#4169#Bolivia#La Paz#7795410
+424200#South America#-5182#Bosnia and Herzegovina#Sarajevo#4697040#19700#Europe#11688
+Botswana#Gaborone#1372453#224600#Africa#2479#Brazil#Brasilia#1.6031E8#3286500
+South America#-5182#Brunei#Bandar Seri Begawan#287822#2200#Asia#8811#Bulgaria#Sofia
+8887111#42900#Europe#-1539#Burkina Faso#Ouagodougou#10235326#105900#Africa#45#Burundi
+Bujumbura#6185632#10700#Africa#957#Cambodia#Phnom Penh#10366614#70200#Asia#-1675
+Cameroon#Yaounde#13261994#183600#Africa#274#Canada#Ottawa#28392302#3849674
+North America#-5182#Cape Verde#Praia#427188#1600#Africa#.#Cayman Islands#Georgetown
+23228#100#Central America and Caribbean#.#Central African  Republic#Bangui#3173103
+240300#Africa#0#Chad#N'Djamena#5521118#495800#Africa#0#Channel Islands# #146436#100
+Europe#.#Chile#Santiago#14089101#292100#South America#-5182#China#Beijing#1.2022E9#3696100
+Asia#-5182#Colombia#Bogota#35930188#440800#South America#-5182#Comoros#Moroni#535246#700
+Africa#5766#Congo#Brazzaville#2471223#132000#Africa#274#Congo, Democratic Republic of
+Kinshasa#43106529#905400#Africa#285#Costa Rica#San Jose#3375083#19700
+Central America and Caribbean#-5182#Cote D'Ivoire#Yamoussoukro#14437516#124500#Africa#45
+Croatia#Zagreb#4744505#21800#Europe#11688#Cuba#Havana#11173523#42800
+Central America and Caribbean#-5182#Cyprus#Nicosia#737226#3600#Asia#288#Czech Republic
+Prague#10511029#30400#Europe#12054#Denmark#Copenhagen#5239356#16600#Europe#-5182
+Djibouti#Djibouti#417089#8900#Africa#6528#Dominica#Roseau#88871#300
+Central America and Caribbean#6879#Dominican Republic#Santo Domingo#7903469#18700
+Central America and Caribbean#-5182#Ecuador#Quito#10782691#105000#South America#-5182
+Egypt#Cairo#59912259#385200#Africa#-5182#El Salvador#San Salvador#5809949#8100
+Central America and Caribbean#-5182#England#London#49293170#50400#Europe#-5478
+Equatorial Guinea#Malabo#414059#10800#Africa#3088#Eritrea#Asmera#3231677#45300#Africa
+12127#Estonia#Tallinn#1633006#17400#Europe#11610#Ethiopia#Addis Ababa#59291170#437800
+Africa#-5182#Fiji#Suva#771563#7100#Oceania#3879#Finland#Helsinki#5119178#130600#Europe
+-1522#France#Paris#58412558#210000#Europe#-5182#French Guiana#Cayenne#102000#43700
+South America#.#Gabon#Libreville#1150275#103300#Africa#31#Gambia (The)#Banjul#968493
+4100#Africa#2161#Georgia, Republic of#Tbilisi#5737236#26900#Asia#11688#Germany#Berlin
+81890690#137700#Europe#4749#Ghana#Accra#17395511#92100#Africa#-808#Gibraltar#Gibraltar
+30297#100#Europe#.#Greece#Athens#10669583#51000#Europe#-5182#Grenada#St. George's#94931
+100#Central America and Caribbean#5218#Guatemala#Guatemala City#10827127#42000
+Central America and Caribbean#-5182#Guinea#Conakry#6455275#94900#Africa#-601
+Guinea-Bissau#Bissau#1108869#13900#Africa#5420#Guyana#Georgetown#736216#83000
+South America#2237#Haiti#Port-au-Prince#6555255#10700#Central America and Caribbean#-5182
+Honduras#Tegucigalpa#5367613#43300#Central America and Caribbean#-5182
+Hong Kong#Victoria#5857414#400#Asia#.#Hungary#Budapest#10421148#35900#Europe#-1492
+Iceland#Reykjavik#266614#36700# #-5045#India#New Delhi#9.2901E8#1222600#Asia#-5182
+Indonesia#Jakarta#2.0239E8#741100#Asia#-3348#Iran#Tehran#66261493#632500#Asia#-5182
+Iraq#Baghdad#20086891#168000#Asia#-5182#Ireland#Dublin#3574032#27100#Europe#-1795
+Isle of Man#Douglas#70693#200#Europe#.#Israel#Jerusalem#5101000#8000#Asia#-3713
+Italy#Rome#58713508#116300#Europe#-1767#Jamaica#Kingston#2580291#4200
+Central America and Caribbean#1004#Japan#Tokyo#1.2635E8#145900#Asia#-1309#Jordan#Amman
+4000210#34300#Asia#-1553#Kalaallit Nunaat#Nuuk#57564#840000# #.#Kazakhstan#Almaty
+17438936#1049200#Asia#11688#Kenya#Nairobi#28520558#225000#Africa#1353#Kiribati#Tarawa
+78772#300#Oceania#.#Korea, North#Pyongyang#23295340#47400#Asia#11323#Korea, South#Seoul
+45529277#38300#Asia#11323#Kuwait#Kuwait City#1837006#6900#Asia#1141#Kyrgyzstan#Bishkek
+4744505#76600#Asia#11688#Laos#Vientiane#4748545#91400#Asia#-1826#Latvia#Riga#2776212
+24900#Europe#11354#Lebanon#Beirut#3655834#3900#Asia#-5182#Leeward Islands#Plymouth
+12119#100#Central America and Caribbean#.#Lesotho#Maseru#1963244#11700#Africa#2464
+Liberia#Monrovia#3002430#38200#Africa#-5182#Libya#Tripoli#5107059#679400#Africa#-1706
+Liechtenstein#Vaduz#30297#100#Europe#11306#Lithuania#Vilnius#3886091#25200#Europe#11354
+Luxembourg#Luxembourg#405980#100#Europe#-5182#Macedonia#Skopje#2235917#9900#Europe#12054
+Madagascar#Antananarivo#13560924#226700#Africa#40#Malawi#Lilongwe#9828337#45700#Africa
+1796#Malaysia#Kuala Lumpur#19473883#127600#Asia#-1081#Maldives#Male#254495#100#Asia#1895
+Mali#Bamako#9203210#482100#Africa#274#Malta#Valletta#370633#100#Europe#1686
+Marshall Islands#Majuro#54535#100#Oceania#11565#Mauritania#Nouakchott#2214709#398000
+Africa#589#Mauritius#Port Louis#1128057#1000#Africa#3210#Mexico#Mexico City#93114708
+756100#North America#-5182#Micronesia#Palikir#121188#300#Oceania#11565#Moldova#Chisinau
+4517279#13000#Europe#11688#Monaco#Monaco#31307#100#Europe#12358#Mongolia#Ulaan Baatar
+2454055#604800#Asia#613#Montenegro#Titograd#626137#5300#Europe#.#Morocco#Rabat#28841705
+177100#Africa#-1461#Mozambique#Maputo#17517708#313700#Africa#5790#Myanmar#Yangon#44715298
+261200#Asia#-4109#Namibia#Windhoek#1611798#318100#Africa#10958#Nauru#Yaren#10099#100
+Oceania#.#Nepal#Kathmandu#21250295#56800#Asia#-1574#Netherlands#Amsterdam#15538306#16000
+Europe#-5182#Netherlands Antilles#Willemstad#185822#400#Central America and Caribbean#.
+New Zealand#Wellington#3422548#104500#Oceania#-5182#Nicaragua#Managua#4137556#50900
+Central America and Caribbean#-5182#Niger#Niamey#8720477#497000#Africa#0#Nigeria#Abuja
+99062003#356700#Africa#243#Northern Ireland#Belfast#1585541#5500#Europe#.#Norway#Oslo
+4357714#125100#Europe#-5182#Oman#Muscat#1717838#118200#Asia#4305#Pakistan#Islamabad
+1.2306E8#339700#Asia#-4435#Panama#Panama City#2656034#29200
+Central America and Caribbean#-5182#Papua New Guinea#Port Moresby#4238546#178700#Asia
+5752#Paraguay#Asuncion#5265614#157000#South America#-5182#Peru#Lima#23885121#496200
+South America#-5182#Philippines#Manila#70500039#115900#Asia#-5182#Poland#Warsaw#39037645
+120700#Europe#-5182#Portugal#Lisbon#10628177#35700#Europe#-1478#Puerto Rico#San Juan
+3556864#3492#Central America and Caribbean#.#Qatar#Doha#518078#4400#Asia#4263#Romania
+Bucharest#23410469#91700#Europe#-1478#Russia#Moscow#1.5109E8#6592800#Europe#-5182
+Rwanda#Kigali#8456895#10200#Africa#865#Saint Kitts and Nevis#Basseterre#41406#100
+Central America and Caribbean#8674#Saint Lucia#Castries#146436#200
+Central America and Caribbean#7258#Saint Vincent and the Grenadines#Kingstown#116138
+200#Central America and Caribbean#7563#San Marino#San Marino#24238#100#Europe#11946
+Sao Tome and Principe#Sao Tome#138356#400#Africa#5639#Saudi Arabia#Riyadh#18377132
+865000#Asia#-5182#Scotland#Edinburgh#5006069#30400#Europe#.#Senegal#Dakar#8817428
+76000#Africa#0#Serbia#Belgrade#9755624#34100#Europe#.#Seychelles#Victoria#72713#200
+Africa#6118#Sierra Leone#Freetown#4675832#27200#Africa#411#Singapore#Singapore#2887301
+200#Asia#2113#Slovakia#Bratislava#5457495#18900#Europe#12100#Slovenia#Ljubljana#1991521
+7800#Europe#11688#Solomon Islands#Honiara#389821#11000#Oceania#6862#Somalia#Mogadishu
+6732996#246300#Africa#227#South Africa#Cape Town#44365873#473300#Africa#-5182
+Spain#Madrid#39692061#194900#Europe#-1478#Sri Lanka#Colombo#18211509#25300#Asia#-1478
+Sudan#Khartoum#29711229#966800#Africa#-1356#Suriname#Paramaribo#427188#63300
+South America#5721#Swaziland#Mbabane#945265#6700#Africa#3257#Sweden#Stockholm#8864893
+173700#Europe#-5113#Switzerland#Bern#7109689#15900#Europe#.#Syria#Damascus#15034366
+71500#Asia#-5182#Taiwan#Taipei#21509839#14000#Asia#.#Tajikistan#Dushanbe#6054344#55300
+Asia#11688#Tanzania#Dar-es-Salaam#28263033#36400#Africa#651#Thailand#Bangkok#60099089
+198100#Asia#-4828#Togo#Lome#4297120#21900#Africa#69#Tonga#Nuku'alofa#106040#300
+Oceania#.#Trinidad and Tobago#Port of Spain#1341146#2000#Central America and Caribbean
+1046#Tunisia#Tunis#8813388#63400#Africa#-1184#Turkey#Ankara#62769263#300948#Europe#-5182
+Turkmenistan#Ashgabat#4034546#188400#Asia#11688#Turks and Caicos Islands#Grand Turk
+12119#200#Central America and Caribbean#.#Tuvalu#Funafuti#10099#100#Oceania#.#Uganda
+Kampala#20055584#93100#Africa#1004#Ukraine#Kiev#52360233#233100#Europe#-5182
+United Arab Emirates#Abu Dhabi#2818628#30000#Asia#4272#United States#Washington
+2.6329E8#3787318#North America#-5182#Uruguay#Montevideo#3230667#68000#South America
+-5182#Uzbekistan#Tashkent#22832806#172700#Asia#11688#Vanuatu#Vila#171683#4700
+Oceania#7914#Vatican City#Vatican City#1010#2#Europe#.#Venezuela#Caracas#20765543
+352100#South America#-5182#Vietnam#Hanoi#73827657#127200#Asia#6210#Wales#Cardiff
+2825697#8000#Europe#.#Western Samoa#Apia#206020#1100#Oceania#5875#Yemen#Sanaa#11214929
+205300#Asia#-4680#Yugoslavia#Belgrade#10866513#39400#Europe#-5182#Zambia#Lusaka#9278952
+290600#Africa#1796#Zimbabwe#Harare#11083641#150900#Africa#7578
+;
+
+
+
+*Creer une copie vide; 
+
+proc sql;
+create table copie_country 
+like countries ; *On prend slm le format avec like;
+quit;
+
+*Ajout d'obs a l'interieur de la copie vide;
+proc sql; 
+insert into copie_country
+set name = 'Japan', capital = 'Tokyo', population = 126352003; quit; 
+
+proc sql;
+insert into copie_country
+select * from countries where population ge 130000000; 
+quit;
+
+
+*Changement de format ; 
+
+proc sql;
+
+select name format = $5.,
+capital format = $3.,
+population format = comma15.2
+from copie_country;
+quit;
+
+
+
+*Les commandes SQL imbriqués ;
+
+proc sql;
+select country, barrelsperday
+from (select *, mean(barrelsperday) as moyenne_mondiale from work.Oilprod) ;
+where barrelsperday > moyenne_mondiale;
+quit;
+
+
+
+*Importer UnitedStates;
+
+data UnitedStates;
+   infile datalines delimiter=',';
+   length Name $35 Capital $35 Population 8 Area 8 Continent $35
+      Statehood 8;
+   input Name Capital Population Area Continent Statehood;
+   informat Name $35. Capital $35. Population best8. Area best8.
+      Continent $35.;
+   format Name $35. Capital $35. Population best8. Area best8.
+      Continent $35.;
+   label Name="Name" Capital="Capital" Population="Population"
+      Continent="Continent";
+datalines;
+Alabama,Montgomery,4227437,52423,North America,-51152
+Alaska,Juneau,604929,656400,North America,-363
+Arizona,Phoenix,3974962,114000,North America,-17488
+Arkansas,Little Rock,2447996,53200,North America,-45124
+California,Sacramento,31518948,163700,North America,-39925
+Colorado,Denver,3601298,104100,North America,-30467
+Connecticut,Hartford,3309742,5500,North America,-62813
+Delaware,Dover,707232,2500,North America,-62846
+District of Columbia,Washington,612907,100,North America,-32455
+Florida,Tallahassee,13814408,65800,North America,-41941
+Georgia,Atlanta,6985572,59400,North America,-62820
+Hawaii,Honolulu,1183198,10900,Oceania,-133
+Idaho,Boise,1109980,83600,North America,-25383
+Illinois,Springfield,11813091,57900,North America,-51528
+Indiana,Indianapolis,5769553,36400,North America,-52250
+Iowa,Des Moines,2841856,56300,North America,-41276
+Kansas,Topeka,2555751,82300,North America,-36130
+Kentucky,Frankfort,3826305,40400,North America,-61208
+Louisiana,Baton Rouge,4338021,51800,North America,-53936
+Maine,Augusta,1251669,35400,North America,-51060
+Maryland,Annapolis,5014048,12400,North America,-62703
+Massachusetts,Boston,6071816,10600,North America,-62785
+Michigan,Lansing,9571318,96700,North America,-44899
+Minnesota,St. Paul,4562117,86900,North America,-37124
+Mississippi,Jackson,2668860,48400,North America,-51886
+Missouri,Jefferson City,5285610,69700,North America,-50547
+Montana,Helena,847709,147000,North America,-25620
+Nebraska,Lincoln,1623109,77400,North America,-33908
+Nevada,Carson City,1402649,110600,North America,-34759
+New Hampshire,Concord,1136439,9400,North America,-62649
+New Jersey,Trenton,7957196,8700,North America,-62835
+New Mexico,Santa Fe,1632501,121600,North America,-17527
+New York,Albany,18377334,54500,North America,-62614
+North Carolina,Raleigh,7013950,53800,North America,-62131
+North Dakota,Bismarck,641185,70700,North America,-25626
+Ohio,Columbus,11200790,44800,North America,-57284
+Oklahoma,Oklahoma City,3263489,69900,North America,-19039
+Oregon,Salem,3061913,98400,North America,-36845
+Pennsylvania,Harrisburg,12167566,46100,North America,-63144
+Rhode Island,Providence,1009899,1500,North America,-61942
+South Carolina,Columbia,3678759,32000,North America,-62678
+South Dakota,Pierre,722481,77100,North America,-25626
+Tennessee,Nashville,5149273,42100,North America,-59747
+Texas,Austin,18209994,268600,North America,-41640
+Utah,Salt Lake City,1878008,84900,North America,-23372
+Vermont,Montpelier,581398,9600,North America,-61663
+Virginia,Richmond,6554851,42800,North America,-62645
+Washington,Olympia,5307322,71300,North America,-25617
+West Virginia,Charleston,1838117,24200,North America,-35258
+Wisconsin,Madison,5087770,65500,North America,-40758
+Wyoming,Cheyenne,474855,97800,North America,-25376
+; 
+
+proc sql ; 
+title 'U.S states with population greater than Belgium';
+select Name 'State', population format= comma10.
+from UnitedStates
+where population gt 10162614;
+quit;
+
+
+proc sql; 
+select population 
+from Countries
+where name = 'Belgium'; 
+quit; 
+
+
+
+
+*Sans hardcoder de chiffre dans le where; 
+
+proc sql ; 
+title 'U.S states with population greater than Belgium';
+select Name 'State', population format= comma10.
+from UnitedStates
+where population gt (select population from Countries where name = 'Belgium');
+quit;
+
+
+
+
+LIBNAME SQL '/home/u64421497/sasuser.v94/ACT3035/Data';
+
+*One to one merge; 
+
+proc sql outobs=100; 
+title 'Type de carte de crédit pour chaque assuré'; 
+select a.numeropol, b.numeropol, a.name, b.credit_card_provider
+from SQL.donnes_demo as a
+left join SQL.pmt as b
+	on a.numeropol = b.numeropol;
+	quit;
+	
+	
+	proc sql outobs=100; 
+title 'Type de carte de crédit pour chaque assuré'; 
+select * 
+from SQL.donnes_demo as a
+left join SQL.pmt as b
+	on a.numeropol = b.numeropol;
+	quit;
+
+
+*One to Many merge;
+
+proc sql outobs=100; 
+select a.numeropol, b.numeropol, a.name, b.marque_voiture, b.license_plate, c.credit_card_provider
+from SQL.donnes_demo as a 
+left join SQL.CARS_INFO as b
+	on a.numeropol = b.numeropol
+left join SQL.PMT as c
+	on b.numeropol = c.numeropol;
+	quit;
+
+
+
+* Nombre de sinistre par assuré ; 
+
+
+proc sql outobs = 100; 
+select a.numeropol, a.name, sum(b.nbsin) as nombre_sin_total
+from SQL.donnes_demo as a
+left join SQL.police_assurance as b 
+	on a.numeropol = b.numeropol
+group by a.numeropol, a.name
+order by nombre_sin_total desc;
+quit;
+
+
+proc sql outobs = 100; 
+select a.numeropol, a.name, sum(b.nbsin) as nombre_sin_total
+from SQL.police_assurance as b
+right join SQL.donnes_demo as a
+	on a.numeropol = b.numeropol
+group by a.numeropol, a.name
+order by nombre_sin_total desc;
+quit;
+
+
+*Supprimer des observations;
+
+proc sql; 
+delete from SQL.donnes_demo where province like 'Q%'; quit;
+
+*Ajout de colonne; 
+proc sql; 
+alter table SQL.donnes_demo
+add dummy num label = 'dummy' format = dollar10.0;
+update  SQL.donnes_demo
+set dummy = 0; 
+quit;
+
+
+proc sql outobs=100;
+select * from SQL.donnes_demo; quit;
+
+
+*Suprimer une colonne; 
+
+proc sql; 
+alter table SQL.donnes_demo
+drop dummy;
+
+proc sql outobs=100;
+select * from SQL.donnes_demo; quit;
+
+*Suprimer une table;
+proc sql; 
+drop table A;
+
+*Compter des doublons; 
+
+proc sql;
+    create table SQL.doublons
+        (id char(12), Nom char(12));
+    insert into SQL.doublons
+        values("123", "Noureddine Meraihi")
+        values("124", "Gabriel A")
+        values("125", "JM P")
+        values("126", "Mathieu P")
+        values("127", "Mathieu B")
+        values("126", "Mathieu P")
+        values("128", "JP B");
+    select * from SQL.doublons;
+quit;
+
+
+proc sql; 
+title 'OBservations dubliquées';
+select *, count(*) as Count
+from SQL.doublons
+group by id, nom;
+quit;
+
+
+proc sql; 
+title 'Observations dubliquées';
+select *, count(*) as Count
+from SQL.doublons
+group by id, nom
+having Count > 1;
+quit;
+
+
+*proc freq ; 
+
+proc freq data = SQL.doublons;
+tables Nom ;
+run;
+
+
+proc freq data = SQL.doublons;
+tables Nom / nopercent nocum ;
+run;
+
+
+*proc rank ;
+
+data elect;
+   input Candidate $ 1-11 District 13 Vote 15-18 Years 20;
+   datalines;
+Cardella    1 1689 8
+Latham      1 1005 2
+Smith       1 1406 0
+Walker      1  846 0
+Hinkley     2  912 0
+Kreitemeyer 2 1198 0
+Lundell     2 2447 6
+Thrash      2  912 2
+;
+proc rank data=elect out=results ties=low descending;
+   by district;
+   var vote years;
+   ranks VoteRank YearsRank;
+run;
+proc print data=results n;
+   by district;
+   title 'Results of City Council Election';
+run; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
